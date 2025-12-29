@@ -1,0 +1,46 @@
+[
+  {
+    "title": "Frontend",
+    "icon": "Palette",
+    "color": "from-pink-500 to-purple-400",
+    "skills": [
+      { "name": "React/Next.js", "level": 95, "years": 6 },
+      { "name": "TypeScript", "level": 90, "years": 4 },
+      { "name": "Tailwind CSS", "level": 95, "years": 3 },
+      { "name": "Vue.js", "level": 85, "years": 3 }
+    ]
+  },
+  {
+    "title": "Backend",
+    "icon": "Code2",
+    "color": "from-purple-400 to-cyan-300",
+    "skills": [
+      { "name": "Node.js/Express", "level": 92, "years": 5 },
+      { "name": "Python/Django", "level": 88, "years": 4 },
+      { "name": "Java/Spring", "level": 85, "years": 3 },
+      { "name": "GraphQL", "level": 90, "years": 3 }
+    ]
+  },
+  {
+    "title": "Database",
+    "icon": "Database",
+    "color": "from-cyan-300 to-purple-400",
+    "skills": [
+      { "name": "PostgreSQL", "level": 85, "years": 3 },
+      { "name": "MongoDB", "level": 80, "years": 2 },
+      { "name": "SQL/Oracle", "level": 82, "years": 3 },
+      { "name": "AWS DynamoDB", "level": 75, "years": 2 }
+    ]
+  },
+  {
+    "title": "DevOps & Cloud",
+    "icon": "Cloud",
+    "color": "from-pink-500 to-cyan-300",
+    "skills": [
+      { "name": "AWS", "level": 70, "years": 5 },
+      { "name": "Docker/Kubernetes", "level": 60, "years": 4 },
+      { "name": "CI/CD", "level": 70, "years": 5 },
+      { "name": "Terraform", "level": 80, "years": 3 }
+    ]
+  }
+]

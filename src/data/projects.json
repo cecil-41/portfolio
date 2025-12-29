@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "title": "Invoice Management System",
+    "description": "Full-stack invoice management application enabling administrators to generate, track, and manage client invoices with automated calculations and payment tracking.",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Node.js_logo.svg/500px-Node.js_logo.svg.png",
+    "tags": ["React", "Node.js", "Express", "PostgreSQL", "Tailwind CSS"],
+    "link": "#",
+    "github": "https://github.com/cecil-41"
+  },
+  {
+    "id": 2,
+    "title": "Storefront E-Commerce Platform",
+    "description": "Full-featured e-commerce storefront with product catalog, shopping cart, order management, and payment processing. Built with Django ORM and RESTful APIs for scalable backend architecture.",
+    "image": "https://www.fullstackpython.com/img/logos/django.png",
+    "tags": ["Django", "Python", "Redis", "Docker", "REST API", "PostgreSQL"],
+    "link": "#",
+    "github": "https://github.com/cecil-41"
+  },
+  {
+    "id": 3,
+    "title": "GBV Reporting Tool",
+    "description": "Secure reporting system designed for university students to confidentially report gender-based violence cases. Successfully deployed and sold to University of Johannesburg with anonymous reporting, case tracking, and support resources.",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/PHP-logo.svg/330px-PHP-logo.svg.png",
+    "tags": ["React", "Node.js", "MongoDB", "Express", "Security", "Privacy"],
+    "link": "#",
+    "github": "#"
+  }
+]

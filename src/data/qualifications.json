@@ -1,0 +1,87 @@
+[
+  {
+    "id": 1,
+    "type": "certification",
+    "title": "AWS Certified Cloud Practitioner",
+    "issuer": "Amazon Web Services",
+    "date": "2025",
+    "icon": "award",
+    "description": "Foundational AWS cloud knowledge and best practices",
+    "credentialId": "5029cab01f05480990a4a3f92c1a7f3b"
+  },
+  {
+    "id": 2,
+    "type": "certification",
+    "title": "AWS Certified Developer - Associate",
+    "issuer": "Amazon Web Services",
+    "date": "2025",
+    "icon": "award",
+    "description": "AWS application development and deployment expertise",
+    "credentialId": "Will be updated soon"
+  },
+  {
+    "id": 3,
+    "type": "certification",
+    "title": "AWS Certified CloudOps Engineer - Associate",
+    "issuer": "Amazon Web Services",
+    "date": "2025",
+    "icon": "award",
+    "description": "AWS system operations and cloud infrastructure management",
+    "credentialId": "Will be updated soon"
+  },
+  {
+    "id": 4,
+    "type": "education",
+    "title": "MCom in Information Technology",
+    "issuer": "University of Johannesburg",
+    "date": "2025 - Present",
+    "icon": "graduation-cap",
+    "description": "Master of Commerce in Information Technology (In Progress)"
+  },
+   {
+    "id": 7,
+    "type": "education",
+    "title": "Higher Certificate in Management Practice",
+    "issuer": "Henley Business School",
+    "date": "2025 - Present",
+    "icon": "graduation-cap",
+    "description": "Higher Certificate in Management Practice (In Progress)"
+  },
+  {
+    "id": 5,
+    "type": "education",
+    "title": "Honours in Information Systems",
+    "issuer": "University of Johannesburg",
+    "date": "2023",
+    "icon": "graduation-cap",
+    "description": "Bachelor of Commerce Honours in Information Systems"
+  },
+  {
+    "id": 6,
+    "type": "education",
+    "title": "BCom in Information Systems",
+    "issuer": "University of Johannesburg",
+    "date": "2020 - 2022",
+    "icon": "graduation-cap",
+    "description": "Bachelor of Commerce in Information Systems"
+  },
+ 
+  {
+    "id": 8,
+    "type": "achievement",
+    "title": "Hackathon Mentor",
+    "issuer": "Geekulcha",
+    "date": "2023 - Present",
+    "icon": "star",
+    "description": "Mentored participants in more than 5 different hackathons sponsored by Geekulcha"
+  },
+  {
+    "id": 9,
+    "type": "achievement",
+    "title": "Career Path Speaker",
+    "issuer": "Various High Schools",
+    "date": "2023 - Present",
+    "icon": "star",
+    "description": "Invited to speak to Grade 12 students about career paths in technology and software engineering"
+  }
+]

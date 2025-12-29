@@ -1,0 +1,51 @@
+[
+  {
+    "id": 1,
+    "company": "BMW South Africa",
+    "position": "Software Engineer (Graduate)",
+    "period": "March 2025 - Present",
+    "description": "Responsible for digitalization and testing Driver Assistance Functions for x3 G45.",
+    "achievements": [
+      "Developed a comprehensive tracking tool consolidating data from multiple sources",
+      "Enabled technicians and engineers to manage testing cars efficiently with unified data access",
+      "Architected and deployed full-stack solution using modern cloud-native architecture",
+      "Implemented containerized microservices with AWS ECS Fargate for scalability and reliability",
+      "Centralized vehicle testing data into single application, eliminating need for multiple apps",
+      "Developed Spring Validation Tool for visualizing car weight distribution and spring measurements",
+      "Deployed tool globally across BMW plants in South Africa, Germany, Mexico, USA, and China",
+      "Created interactive visualization system for engineers to analyze how different car options influence spring load",
+      "Responsible for testing Driver Assistance Functions features of the x3 G45"
+    ],
+    "technologies": ["React", "AWS ECS", "Fargate", "Tailwind", "Vite", "Python", "Docker", "Node.js", "Lambda", "S3", "API Gateway"]
+  },
+  {
+    "id": 2,
+    "company": "BMW South Africa",
+    "position": "Software Engineer (Intern)",
+    "period": "March 2024 - February 2025",
+    "description": "Supported digital transformation initiatives and software development projects.",
+    "achievements": [
+      "Successfully built Project Management Tool to manage all x3 G45 projects",
+      "Automated data aggregation from multiple sources, replacing manual Excel processes",
+      "Deployed enterprise solution now used by entire BMW Plant 09 for project management steering",
+      "Reduced human errors through automation and enabled real-time data synchronization",
+      "Provided web-based access to build plans, eliminating dependency on static files and folder navigation",
+      "Streamlined project build tracking, car data management, and reporting workflows"
+    ],
+    "technologies": ["Python", "JavaScript", "SQL", "Oracle Cloud", "HTML", "CSS"]
+  },
+  {
+    "id": 3,
+    "company": "University of Johannesburg",
+    "position": "Software Development Tutor",
+    "period": "February 2023 - November 2023",
+    "description": "Tutored and mentored students in software development module and programming fundamentals.",
+    "achievements": [
+      "Guided students through core programming concepts and best practices",
+      "Provided one-on-one mentoring and assignment support",
+      "Helped improve student understanding and academic performance",
+      "Facilitated practical coding sessions and workshops"
+    ],
+    "technologies": ["C#", "Python", "SQL", "HTML", "CSS", "JavaScript"]
+  }
+]
