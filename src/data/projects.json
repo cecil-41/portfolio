@@ -12,7 +12,7 @@
     "id": 2,
     "title": "Storefront E-Commerce Platform",
     "description": "Full-featured e-commerce storefront with product catalog, shopping cart, order management, and payment processing. Built with Django ORM and RESTful APIs for scalable backend architecture.",
-    "image": "https://www.fullstackpython.com/img/logos/django.png",
+    "image": "https://www.djangoproject.com/m/img/logos/django-logo-positive.png",
     "tags": ["Django", "Python", "Redis", "Docker", "REST API", "PostgreSQL"],
     "link": "#",
     "github": "https://github.com/cecil-41"

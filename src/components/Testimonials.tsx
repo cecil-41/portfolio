@@ -81,21 +81,21 @@ const Testimonials: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-16 relative z-20"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-purple-400 via-pink-500 to-cyan-300 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-purple-400 via-pink-500 to-cyan-300 bg-clip-text text-transparent">
               Client Testimonials
             </span>
           </h2>
-          <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto">
+          <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto mb-8 sm:mb-0">
             What people say about working with me
           </p>
         </motion.div>
 
         {/* Testimonial Carousel */}
         <div className="relative max-w-4xl mx-auto">
-          <div className="relative min-h-[500px] flex items-center">
+          <div className="relative min-h-[500px] flex items-center mt-8 sm:mt-0">
             <AnimatePresence initial={false} custom={direction}>
               <motion.div
                 key={currentIndex}
@@ -164,7 +164,7 @@ const Testimonials: React.FC = () => {
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
-                  className="p-2 rounded-lg bg-gradient-to-r from-purple-400 to-pink-500 hover:shadow-glow text-white transition-all duration-300"
+                  className="p-2 rounded-lg bg-linear-to-r from-purple-400 to-pink-500 hover:shadow-glow text-white transition-all duration-300"
                   aria-label={`View ${currentTestimonial.name}'s LinkedIn profile`}
                 >
                   <Linkedin size={20} className="text-white" />

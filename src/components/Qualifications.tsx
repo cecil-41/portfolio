@@ -101,12 +101,12 @@ const Qualifications: React.FC = () => {
           
           {/* View All Certificates Button */}
           <motion.a
-            href="YOUR_GOOGLE_DRIVE_LINK_HERE"
+            href="https://drive.google.com/drive/folders/1J3f7hMzE-pCRraPX9NKaqj-01hfndhzs?usp=drive_link"
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-gradient-to-r from-purple-400 to-pink-500 text-white rounded-lg font-semibold shadow-lg hover:shadow-glow transition-all duration-300"
+            className="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-linear-to-r from-purple-400 to-pink-500 text-white rounded-lg font-semibold shadow-lg hover:shadow-glow transition-all duration-300"
           >
             <ExternalLink size={20} className="text-white" />
             <span className="text-white">View All Certificates</span>
