@@ -65,10 +65,10 @@ const Hero: React.FC = () => {
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 sm:pt-16">
       {/* Advanced 3D Tech Background */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-slate-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800" />
+        <div className="absolute inset-0 bg-linear-to-br from-slate-50 via-slate-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800" />
         
         {/* Grid Pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(168,85,247,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.03)_1px,transparent_1px)] bg-[size:50px_50px] dark:bg-[linear-gradient(rgba(168,85,247,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.1)_1px,transparent_1px)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(168,85,247,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.03)_1px,transparent_1px)] bg-size-[50px_50px] dark:bg-[linear-gradient(rgba(168,85,247,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.1)_1px,transparent_1px)]" />
         
         {/* Floating Tech Logos */}
         {[
@@ -187,7 +187,7 @@ const Hero: React.FC = () => {
             scale: [1, 1.2, 1],
           }}
           transition={{ duration: 20, repeat: Infinity }}
-          className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-purple-400/20 to-pink-500/20 rounded-full blur-3xl"
+          className="absolute -top-40 -right-40 w-80 h-80 bg-linear-to-br from-purple-400/20 to-pink-500/20 rounded-full blur-3xl"
         />
         <motion.div
           animate={{
@@ -196,7 +196,7 @@ const Hero: React.FC = () => {
             scale: [1, 1.2, 1],
           }}
           transition={{ duration: 25, repeat: Infinity }}
-          className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-cyan-300/20 to-purple-400/20 rounded-full blur-3xl"
+          className="absolute -bottom-40 -left-40 w-80 h-80 bg-linear-to-br from-cyan-300/20 to-purple-400/20 rounded-full blur-3xl"
         />
         
         {/* Floating Particles */}
@@ -234,7 +234,7 @@ const Hero: React.FC = () => {
 
           {/* Main Headline */}
           <motion.h1 variants={itemVariants} className="text-5xl sm:text-6xl lg:text-7xl font-bold font-display mb-6">
-            <span className="bg-gradient-to-r from-purple-400 via-pink-500 to-cyan-300 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-purple-400 via-pink-500 to-cyan-300 bg-clip-text text-transparent">
               {typedText}
               <span className="animate-pulse">|</span>
             </span>
@@ -253,7 +253,7 @@ const Hero: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-              className="cursor-pointer px-8 py-4 bg-gradient-to-r from-purple-400 to-pink-500 text-white rounded-lg font-semibold hover:shadow-glow transition-all duration-300"
+              className="cursor-pointer px-8 py-4 bg-linear-to-r from-purple-400 to-pink-500 text-white rounded-lg font-semibold hover:shadow-glow transition-all duration-300"
             >
               View My Projects
             </motion.button>

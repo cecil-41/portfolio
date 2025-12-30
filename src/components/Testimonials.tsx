@@ -56,7 +56,7 @@ const Testimonials: React.FC = () => {
   return (
     <section id="testimonials" className="py-20 bg-white dark:bg-slate-800 relative overflow-hidden">
       {/* Background Decoration */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(168,85,247,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.03)_1px,transparent_1px)] bg-[size:50px_50px] dark:bg-[linear-gradient(rgba(168,85,247,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.1)_1px,transparent_1px)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(168,85,247,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.03)_1px,transparent_1px)] bg-size-[50px_50px] dark:bg-[linear-gradient(rgba(168,85,247,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.1)_1px,transparent_1px)]" />
       
       {/* Floating Quote Icons */}
       <motion.div
@@ -81,21 +81,23 @@ const Testimonials: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16 relative z-20"
+          className="text-center mb-6 relative z-20"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             <span className="bg-linear-to-r from-purple-400 via-pink-500 to-cyan-300 bg-clip-text text-transparent">
               Client Testimonials
             </span>
           </h2>
-          <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto mb-8 sm:mb-0">
+          <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto mb-8 sm:mb-0 pb-4 sm:pb-0">
             What people say about working with me
           </p>
         </motion.div>
 
         {/* Testimonial Carousel */}
         <div className="relative max-w-4xl mx-auto">
-          <div className="relative min-h-[500px] flex items-center mt-8 sm:mt-0">
+          <div className="relative flex flex-col items-center mt-2 sm:mt-0">
+            {/* Increased extra margin for mobile to prevent overlap */}
+            <div className="h-1 block sm:hidden" />
             <AnimatePresence initial={false} custom={direction}>
               <motion.div
                 key={currentIndex}
@@ -120,11 +122,11 @@ const Testimonials: React.FC = () => {
                     paginate(-1);
                   }
                 }}
-                className="bg-slate-50 dark:bg-slate-900 rounded-3xl p-8 md:p-12 shadow-xl w-full absolute"
+                className="bg-slate-50 dark:bg-slate-900 rounded-3xl p-8 md:p-12 shadow-xl w-full z-20"
               >
               {/* Quote Icon */}
               <div className="flex justify-center mb-6">
-                <div className="p-4 rounded-full bg-gradient-to-br from-purple-400/20 to-pink-500/20">
+                <div className="p-4 rounded-full bg-linear-to-br from-purple-400/20 to-pink-500/20">
                   <Quote size={32} className="text-purple-400" />
                 </div>
               </div>
@@ -149,10 +151,10 @@ const Testimonials: React.FC = () => {
                   alt={currentTestimonial.name}
                   className="w-16 h-16 rounded-full mb-4 border-4 border-purple-400/30"
                 />
-                <h4 className="text-slate-900 dark:text-slate-100 font-bold text-lg">
+                <h4 className="text-slate-900 dark:text-slate-100 font-bold text-lg text-center wrap-break-word">
                   {currentTestimonial.name}
                 </h4>
-                <p className="text-purple-400 font-medium">
+                <p className="text-purple-400 font-medium text-center wrap-break-word whitespace-pre-line">
                   {currentTestimonial.role}
                 </p>
                 <p className="text-slate-600 dark:text-slate-400 text-sm mb-3">
@@ -175,7 +177,7 @@ const Testimonials: React.FC = () => {
           </div>
 
           {/* Navigation Buttons */}
-          <div className="flex justify-center items-center gap-4 mt-8">
+          <div className="flex justify-center items-center gap-4 mt-8 z-30 relative">
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}

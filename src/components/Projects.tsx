@@ -50,7 +50,7 @@ const Projects: React.FC = () => {
   };
 
   return (
-    <section id="projects" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+    <section id="projects" className="py-20 px-4 sm:px-6 lg:px-8 bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <motion.div
@@ -60,7 +60,7 @@ const Projects: React.FC = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl sm:text-5xl font-bold font-display mb-4">
-            <span className="bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
               Featured Projects
             </span>
           </h2>
@@ -98,7 +98,7 @@ const Projects: React.FC = () => {
                     alt={project.title}
                     className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300 bg-white"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                  <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                     <p className="text-white text-sm font-medium">View Project</p>
                   </div>
                 </div>
@@ -133,7 +133,7 @@ const Projects: React.FC = () => {
                         href={project.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-400 to-pink-500 text-white rounded-lg text-sm font-semibold hover:shadow-glow transition-all shadow-md"
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-linear-to-r from-purple-400 to-pink-500 text-white rounded-lg text-sm font-semibold hover:shadow-glow transition-all shadow-md"
                       >
                         <ExternalLink size={16} className="text-white" />
                         <span className="text-white">Live</span>

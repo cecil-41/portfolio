@@ -79,7 +79,7 @@ const Qualifications: React.FC = () => {
   return (
     <section id="qualifications" className="py-20 bg-white dark:bg-slate-800 relative overflow-hidden">
       {/* Background Decoration */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(168,85,247,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.03)_1px,transparent_1px)] bg-[size:50px_50px] dark:bg-[linear-gradient(rgba(168,85,247,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.1)_1px,transparent_1px)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(168,85,247,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.03)_1px,transparent_1px)] bg-size-[50px_50px] dark:bg-[linear-gradient(rgba(168,85,247,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.1)_1px,transparent_1px)]" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
@@ -91,7 +91,7 @@ const Qualifications: React.FC = () => {
           className="text-center mb-12"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-purple-400 via-pink-500 to-cyan-300 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-purple-400 via-pink-500 to-cyan-300 bg-clip-text text-transparent">
               Qualifications
             </span>
           </h2>
@@ -129,7 +129,7 @@ const Qualifications: React.FC = () => {
               onClick={() => setActiveFilter(filter.id)}
               className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
                 activeFilter === filter.id
-                  ? 'bg-gradient-to-r from-purple-400 to-pink-500 text-white shadow-lg'
+                  ? 'bg-linear-to-r from-purple-400 to-pink-500 text-white shadow-lg'
                   : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
               }`}
             >
@@ -158,9 +158,9 @@ const Qualifications: React.FC = () => {
                 <div className="flex items-start gap-4">
                   {/* Icon */}
                   <div
-                    className={`p-3 rounded-xl bg-gradient-to-br ${getTypeColor(
+                    className={`p-3 rounded-xl bg-linear-to-br ${getTypeColor(
                       qualification.type
-                    )} flex-shrink-0`}
+                    )} shrink-0`}
                   >
                     <Icon size={28} className="text-white" />
                   </div>
@@ -172,9 +172,9 @@ const Qualifications: React.FC = () => {
                         {qualification.title}
                       </h3>
                       {qualification.description?.includes('In Progress') ? (
-                        <Clock size={20} className="text-yellow-500 flex-shrink-0 ml-2 animate-pulse" />
+                        <Clock size={20} className="text-yellow-500 shrink-0 ml-2 animate-pulse" />
                       ) : (
-                        <CheckCircle size={20} className="text-green-500 flex-shrink-0 ml-2" />
+                        <CheckCircle size={20} className="text-green-500 shrink-0 ml-2" />
                       )}
                     </div>
 
@@ -190,17 +190,12 @@ const Qualifications: React.FC = () => {
                       <span className="text-slate-500 dark:text-slate-500 text-sm">
                         {qualification.date}
                       </span>
-                      {qualification.credentialId && (
-                        <span className="text-xs text-slate-400 dark:text-slate-600 font-mono">
-                          ID: {qualification.credentialId}
-                        </span>
-                      )}
                     </div>
 
                     {/* Type Badge */}
                     <div className="mt-3">
                       <span
-                        className={`inline-block px-3 py-1 rounded-full text-xs font-semibold text-white bg-gradient-to-r ${getTypeColor(
+                        className={`inline-block px-3 py-1 rounded-full text-xs font-semibold text-white bg-linear-to-r ${getTypeColor(
                           qualification.type
                         )}`}
                       >

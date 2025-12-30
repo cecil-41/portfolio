@@ -22,8 +22,8 @@
     "title": "GBV Reporting Tool",
     "description": "Secure reporting system designed for university students to confidentially report gender-based violence cases. Successfully deployed and sold to University of Johannesburg with anonymous reporting, case tracking, and support resources.",
     "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/PHP-logo.svg/330px-PHP-logo.svg.png",
-    "tags": ["React", "Node.js", "MongoDB", "Express", "Security", "Privacy"],
+    "tags": ["PHP", "MySQL", "Apache", "Linux CLI", "Ajax", "Bootstrap", "jQuery"],
     "link": "#",
-    "github": "#"
+    "github": "https://github.com/cecil-41"
   }
 ]

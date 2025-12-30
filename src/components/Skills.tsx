@@ -53,7 +53,7 @@ const Skills: React.FC = () => {
   };
 
   return (
-    <section id="skills" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+    <section id="skills" className="py-20 px-4 sm:px-6 lg:px-8 bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <motion.div
@@ -63,7 +63,7 @@ const Skills: React.FC = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl sm:text-5xl font-bold font-display mb-4">
-            <span className="bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
               Technical Skills
             </span>
           </h2>
@@ -87,7 +87,7 @@ const Skills: React.FC = () => {
               onClick={() => setActiveCategory(index)}
               className={`cursor-pointer px-6 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center gap-2 ${
                 activeCategory === index
-                  ? `bg-gradient-to-r ${category.color} text-white shadow-glow`
+                  ? `bg-linear-to-r ${category.color} text-white shadow-glow`
                   : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600'
               }`}
             >
@@ -111,7 +111,7 @@ const Skills: React.FC = () => {
               className="group relative bg-white dark:bg-slate-700 rounded-xl p-6 overflow-hidden hover:shadow-lg transition-all duration-300"
             >
               {/* Gradient Border */}
-              <div className={`absolute inset-0 bg-gradient-to-r ${skillCategories[activeCategory].color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
+              <div className={`absolute inset-0 bg-linear-to-r ${skillCategories[activeCategory].color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
 
               <div className="relative z-10">
                 <div className="flex justify-between items-start mb-4">
@@ -132,7 +132,7 @@ const Skills: React.FC = () => {
                       initial={{ width: 0 }}
                       whileInView={{ width: `${skill.level}%` }}
                       transition={{ duration: 0.8, ease: 'easeOut' }}
-                      className={`h-full bg-gradient-to-r ${skillCategories[activeCategory].color}`}
+                      className={`h-full bg-linear-to-r ${skillCategories[activeCategory].color}`}
                     />
                   </div>
                 </div>

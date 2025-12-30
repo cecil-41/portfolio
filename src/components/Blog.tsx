@@ -75,7 +75,7 @@ const Blog: React.FC = () => {
           className="text-center mb-12"
         >
           <h2 className="text-4xl sm:text-5xl font-bold font-display mb-4">
-            <span className="bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
               Blog & Insights
             </span>
           </h2>
@@ -118,7 +118,7 @@ const Blog: React.FC = () => {
               onClick={() => setSelectedCategory(category)}
               className={`cursor-pointer px-4 py-2 rounded-lg capitalize font-medium transition-all duration-300 ${
                 selectedCategory === category
-                  ? 'bg-gradient-to-r from-purple-400 to-pink-500 text-white shadow-glow'
+                  ? 'bg-linear-to-r from-purple-400 to-pink-500 text-white shadow-glow'
                   : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
               }`}
             >

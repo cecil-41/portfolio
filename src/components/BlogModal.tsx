@@ -97,9 +97,9 @@ const BlogModal: React.FC<BlogModalProps> = ({ isOpen, onClose, blog }) => {
           />
 
           {/* Reading Progress Bar */}
-          <div className="fixed top-0 left-0 right-0 z-[60] h-1 bg-slate-200 dark:bg-slate-700">
+          <div className="fixed top-0 left-0 right-0 z-60 h-1 bg-slate-200 dark:bg-slate-700">
             <motion.div
-              className="h-full bg-gradient-to-r from-purple-400 to-pink-500"
+              className="h-full bg-linear-to-r from-purple-400 to-pink-500"
               style={{ width: `${scrollProgress}%` }}
               initial={{ width: 0 }}
               animate={{ width: `${scrollProgress}%` }}
@@ -135,11 +135,11 @@ const BlogModal: React.FC<BlogModalProps> = ({ isOpen, onClose, blog }) => {
                     alt={blog.title}
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent" />
+                  <div className="absolute inset-0 bg-linear-to-t from-slate-900/60 to-transparent" />
                   
                   {/* Category Badge */}
                   <div className="absolute top-4 left-4">
-                    <span className="px-4 py-2 bg-gradient-to-r from-purple-400 to-pink-500 text-white text-sm font-semibold rounded-full">
+                    <span className="px-4 py-2 bg-linear-to-r from-purple-400 to-pink-500 text-white text-sm font-semibold rounded-full">
                       {blog.category}
                     </span>
                   </div>
@@ -169,7 +169,7 @@ const BlogModal: React.FC<BlogModalProps> = ({ isOpen, onClose, blog }) => {
                   </div>
 
                   {/* Divider */}
-                  <div className="h-px bg-gradient-to-r from-transparent via-purple-400 to-transparent mb-6" />
+                  <div className="h-px bg-linear-to-r from-transparent via-purple-400 to-transparent mb-6" />
 
                   {/* Blog Content */}
                   <div className="prose prose-slate dark:prose-invert max-w-none">
@@ -276,7 +276,7 @@ const BlogModal: React.FC<BlogModalProps> = ({ isOpen, onClose, blog }) => {
                             whileHover={{ x: 5 }}
                             className="flex items-start gap-3 p-3 rounded-lg bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors group"
                           >
-                            <ExternalLink size={18} className="mt-0.5 text-purple-500 flex-shrink-0" />
+                            <ExternalLink size={18} className="mt-0.5 text-purple-500 shrink-0" />
                             <div className="flex-1">
                               <div className="font-semibold text-slate-900 dark:text-slate-100 group-hover:text-purple-500 dark:group-hover:text-purple-400 transition-colors">
                                 {ref.title}
@@ -297,7 +297,7 @@ const BlogModal: React.FC<BlogModalProps> = ({ isOpen, onClose, blog }) => {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={onClose}
-                      className="w-full px-6 py-3 bg-gradient-to-r from-purple-400 to-pink-500 text-white rounded-lg font-semibold shadow-lg hover:shadow-glow transition-all duration-300"
+                      className="w-full px-6 py-3 bg-linear-to-r from-purple-400 to-pink-500 text-white rounded-lg font-semibold shadow-lg hover:shadow-glow transition-all duration-300"
                     >
                       Close Article
                     </motion.button>
