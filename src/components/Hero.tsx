@@ -258,11 +258,13 @@ const Hero: React.FC = () => {
               View My Projects
             </motion.button>
             <motion.a
-              href="/resume.pdf"
+              href="/portfolio/resume.pdf"
               download="Cecil_Resume.pdf"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="cursor-pointer px-8 py-4 border-2 border-purple-400 text-purple-400 dark:text-cyan-300 rounded-lg font-semibold hover:bg-purple-400/10 transition-all duration-300 text-center"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               Download Resume
             </motion.a>

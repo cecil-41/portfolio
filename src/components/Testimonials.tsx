@@ -19,26 +19,29 @@ const Testimonials: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
 
-  const slideVariants = {
+  // Fix slideVariants typing for framer-motion strictness
+  const slideVariants: any = {
     enter: (direction: number) => ({
-      x: direction > 0 ? 1000 : -1000,
+      x: direction > 0 ? 300 : -300,
       opacity: 0,
+      position: 'absolute',
     }),
     center: {
       zIndex: 1,
       x: 0,
       opacity: 1,
+      position: 'relative',
+      transition: {
+        x: { type: 'spring' as const, stiffness: 300, damping: 30 },
+        opacity: { duration: 0.3 },
+      },
     },
     exit: (direction: number) => ({
       zIndex: 0,
-      x: direction < 0 ? 1000 : -1000,
+      x: direction < 0 ? 300 : -300,
       opacity: 0,
+      position: 'absolute',
     }),
-  };
-
-  const swipeConfidenceThreshold = 10000;
-  const swipePower = (offset: number, velocity: number) => {
-    return Math.abs(offset) * velocity;
   };
 
   const paginate = (newDirection: number) => {
@@ -108,21 +111,20 @@ const Testimonials: React.FC = () => {
                 exit="exit"
                 transition={{
                   x: { type: "spring", stiffness: 300, damping: 30 },
-                  opacity: { duration: 0.3 },
+                  opacity: { duration: 0.3 }
                 }}
+                className="bg-slate-50 dark:bg-slate-900 rounded-3xl p-8 md:p-12 shadow-xl w-full z-20"
                 drag="x"
                 dragConstraints={{ left: 0, right: 0 }}
-                dragElastic={1}
+                dragElastic={0.8}
                 onDragEnd={(_, { offset, velocity }) => {
-                  const swipe = swipePower(offset.x, velocity.x);
-
-                  if (swipe < -swipeConfidenceThreshold) {
+                  const swipe = Math.abs(offset.x) * velocity.x;
+                  if (swipe < -1000) {
                     paginate(1);
-                  } else if (swipe > swipeConfidenceThreshold) {
+                  } else if (swipe > 1000) {
                     paginate(-1);
                   }
                 }}
-                className="bg-slate-50 dark:bg-slate-900 rounded-3xl p-8 md:p-12 shadow-xl w-full z-20"
               >
               {/* Quote Icon */}
               <div className="flex justify-center mb-6">
