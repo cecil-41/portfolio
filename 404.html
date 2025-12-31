@@ -4,11 +4,20 @@
   <meta charset="utf-8">
   <title>Redirecting...</title>
   <script>
-    // GitHub Pages SPA redirect hack
-    // Store the current path in sessionStorage and redirect to the base URL
-    // The main index.html will read this and restore the correct URL
-    sessionStorage.redirect = location.href;
-    location.replace(location.origin + location.pathname.split('/').slice(0, -1).join('/') + '/?p=/' + location.pathname.slice(1).split('/').slice(1).join('/') + location.search);
+    // Single Page Apps for GitHub Pages
+    // https://github.com/rafgraph/spa-github-pages
+    // Redirects take advantage of the fact that GitHub Pages doesn't handle
+    // 404s by making requests to the backend, but rather serves up the 404.html
+    var pathSegmentsToKeep = 1; // Keep '/portfolio' in the path
+
+    var l = window.location;
+    l.replace(
+      l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+      l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
+      l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+      (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+      l.hash
+    );
   </script>
 </head>
 <body>
