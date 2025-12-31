@@ -385,7 +385,7 @@ const BlogPost: React.FC = () => {
             Check out more articles on web development, DevOps, and software engineering.
           </p>
           <Link
-            to="/#blog"
+            to="/blog"
             className="inline-flex items-center gap-2 px-6 py-3 bg-linear-to-r from-purple-400 to-pink-500 text-white rounded-lg font-semibold shadow-lg hover:shadow-glow transition-all"
             style={{ color: 'white' }}
           >
