@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Menu, X, Moon, Sun } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Navigation: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const { isDark, toggleTheme } = useTheme();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const navItems = [
     { name: 'Home', href: '#home' },
@@ -19,8 +22,20 @@ const Navigation: React.FC = () => {
     { name: 'Contact', href: '#contact' },
   ];
 
+  const isBlogPostPage = location.pathname.startsWith('/blog/');
+  const isBlogListPage = location.pathname === '/blog';
+
   // Track active section based on scroll position
   useEffect(() => {
+    // Set active section based on current route
+    if (isBlogListPage || isBlogPostPage) {
+      setActiveSection('blog');
+      return;
+    }
+
+    // Skip observation on blog pages
+    if (isBlogPostPage || isBlogListPage) return;
+
     const observerOptions = {
       root: null,
       rootMargin: '-20% 0px -60% 0px',
@@ -46,24 +61,53 @@ const Navigation: React.FC = () => {
     });
 
     return () => observer.disconnect();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isBlogPostPage, isBlogListPage]);
 
   const handleNavClick = (href: string) => {
     setIsOpen(false);
-    // Small delay to allow menu to close before scrolling
-    setTimeout(() => {
-      const element = document.querySelector(href);
-      if (element) {
-        const offset = 80; // Account for fixed navbar height
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - offset;
-        
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-      }
-    }, 100);
+    
+    // If we're on a blog page, navigate to home first
+    if (isBlogPostPage || isBlogListPage) {
+      navigate('/');
+      // Wait for navigation and then scroll
+      setTimeout(() => {
+        const element = document.querySelector(href);
+        if (element) {
+          const offset = 80;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - offset;
+          
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
+      }, 300);
+    } else {
+      // Regular scroll behavior
+      setTimeout(() => {
+        const element = document.querySelector(href);
+        if (element) {
+          const offset = 80;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - offset;
+          
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
+      }, 100);
+    }
+  };
+
+  const handleLogoClick = () => {
+    if (isBlogPostPage || isBlogListPage) {
+      navigate('/');
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   return (
@@ -78,6 +122,7 @@ const Navigation: React.FC = () => {
           {/* Logo */}
           <motion.div
             whileHover={{ scale: 1.05 }}
+            onClick={handleLogoClick}
             className="flex items-center cursor-pointer"
           >
             <div className="relative w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-500 rounded-lg flex items-center justify-center">
