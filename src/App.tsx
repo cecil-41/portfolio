@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './hooks/useTheme';
 import Navigation from './components/Navigation';
 import Hero from './components/Hero';
@@ -36,7 +36,7 @@ function HomePage() {
 function App() {
   return (
     <ThemeProvider>
-      <Router basename="/portfolio">
+      <Router>
         <ScrollProgress />
         <Navigation />
         <Routes>

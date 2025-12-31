@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Calendar, User, Clock, Copy, Check, ExternalLink, ArrowLeft, Share2 } from 'lucide-react';
+import { Calendar, User, Clock, Copy, Check, ExternalLink, ArrowLeft, Share2, Home, ChevronRight } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/github-dark.css';
@@ -159,8 +159,34 @@ const BlogPost: React.FC = () => {
         />
         <div className="absolute inset-0 bg-linear-to-t from-slate-900/80 to-transparent" />
 
+        {/* Breadcrumb - Top Left (Hidden on mobile) */}
+        <div className="absolute top-4 left-0 right-0 z-10 hidden md:block">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <nav className="flex items-center gap-2 text-white/90 text-sm">
+              <Link 
+                to="/" 
+                className="hover:text-white transition-colors flex items-center gap-1"
+              >
+                <Home size={16} />
+                Home
+              </Link>
+              <ChevronRight size={16} className="text-white/60" />
+              <Link 
+                to="/blog" 
+                className="hover:text-white transition-colors"
+              >
+                All Articles
+              </Link>
+              <ChevronRight size={16} className="text-white/60" />
+              <span className="text-white font-medium truncate max-w-[200px] sm:max-w-none">
+                {blog.title}
+              </span>
+            </nav>
+          </div>
+        </div>
+
         {/* Badge & Button Container - Aligned with Navigation */}
-        <div className="absolute top-8 left-0 right-0">
+        <div className="absolute top-16 left-0 right-0">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
             {/* Category Badge - Left */}
             <span className="px-4 py-2 bg-linear-to-r from-purple-400 to-pink-500 text-white text-sm font-semibold rounded-full">
@@ -173,7 +199,7 @@ const BlogPost: React.FC = () => {
               animate={{ opacity: 1, x: 0 }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => navigate('/#blog')}
+              onClick={() => navigate('/blog')}
               className="inline-flex items-center gap-2 px-4 py-2 border-2 border-purple-400 text-purple-400 dark:border-cyan-300 dark:text-cyan-300 bg-white/10 dark:bg-slate-900/50 backdrop-blur-sm rounded-full font-semibold hover:bg-purple-400/10 dark:hover:bg-cyan-300/10 transition-all shadow-lg"
             >
               <ArrowLeft size={18} />
