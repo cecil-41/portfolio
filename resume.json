@@ -1,0 +1,83 @@
+{
+  "basics": {
+    "name": "Cecil Sithole",
+    "email": "cecilbennett41@gmail.com",
+    "phone": "074 799 4658",
+    "url": "https://cecil-41.github.io/portfolio-cecil",
+    "summary": "I am a double cum laude graduate with an honors degree in Information Systems and a full-stack software developer with three years of hands-on experience. Currently a graduate at BMW, I specialize in web development, database design, cloud computing, and API integration. I have experience in software development and Driving Assistant Functions testing (FAS), as well as AWS system migration and production tracking optimization."
+  },
+  "sections": {
+    "work": {
+      "name": "Work Experience",
+      "items": [
+        {
+          "company": "BMW",
+          "position": "Software Developer Graduate",
+          "date": "Mar 2025 - Present",
+          "summary": "Key role in digitization and innovation, focusing on software development and Driving Assistant Functions testing (FAS) for the new X3 model."
+        },
+        {
+          "company": "BMW",
+          "position": "Software Developer Intern",
+          "date": "Apr 2024 - Feb 2025",
+          "summary": "Contributed to system migration to AWS and dashboard development for X3-G45 tracking; optimized production insights through Oracle and Qlik Sense."
+        },
+        {
+          "company": "Technopreneurship Centre UJ",
+          "position": "Software Developer",
+          "date": "Jul 2023 - Dec 2023"
+        },
+        {
+          "company": "University of Johannesburg",
+          "position": "Assistant Lecturer & Software Development Tutor",
+          "date": "Feb 2022 - Nov 2023"
+        }
+      ]
+    },
+    "education": {
+      "name": "Education",
+      "items": [
+        {
+          "institution": "University of Johannesburg",
+          "area": "MCom Information Technology",
+          "date": "2025 (In-Progress)"
+        },
+        {
+          "institution": "University of Johannesburg",
+          "area": "BCom Hons Information Systems",
+          "score": "cum laude",
+          "date": "2023"
+        },
+        {
+          "institution": "University of Johannesburg",
+          "area": "BCom Information Systems",
+          "score": "cum laude",
+          "date": "2022"
+        },
+        {
+          "institution": "Lethabong Secondary School",
+          "area": "National Senior Certificate",
+          "date": "2018"
+        }
+      ]
+    },
+    "skills": {
+      "name": "Technical Skills",
+      "items": [
+        { "name": "Languages", "description": "Python, HTML5/CSS, C#, PHP, JavaScript, Shell Scripting (Bash), SQL" },
+        { "name": "Frameworks", "description": "Tailwind CSS, Bootstrap, Django, Flask, React, Node.js" },
+        { "name": "Cloud (AWS)", "description": "Lambda, EC2, S3, API Gateway, DynamoDB, QuickSight, Athena, Amplify" },
+        { "name": "Databases", "description": "MySQL, DynamoDB, MongoDB, MS SQL Server" },
+        { "name": "Tools", "description": "Postman, JIRA, Confluence, GitHub, Bitbucket, Docker, Agile/Scrum" }
+      ]
+    },
+    "certifications": {
+      "name": "Certifications",
+      "items": [
+        { "name": "AWS Certified Cloud Practitioner" },
+        { "name": "Google Associate Cloud Engineer" },
+        { "name": "Google Data Analytics" }
+      ]
+    }
+  }
+}
