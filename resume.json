@@ -3,34 +3,31 @@
     "name": "Cecil Sithole",
     "email": "cecilbennett41@gmail.com",
     "phone": "074 799 4658",
-    "url": "https://cecil-41.github.io/portfolio-cecil",
-    "summary": "I am a double cum laude graduate with an honors degree in Information Systems and a full-stack software developer with three years of hands-on experience. Currently a graduate at BMW, I specialize in web development, database design, cloud computing, and API integration. I have experience in software development and Driving Assistant Functions testing (FAS), as well as AWS system migration and production tracking optimization."
+    "url": "https://cecil-41.github.io/portfolio",
+    "certificatesUrl": "https://drive.google.com/drive/folders/1J3f7hMzE-pCRraPX9NKaqj-01hfndhzs?usp=drive_link",
+    "summary": "I am a double cum laude graduate with an honors degree in Information Systems and a full-stack software developer with three years of hands-on experience. Currently a Software Engineer Graduate at BMW South Africa, I specialize in web development, database design, cloud computing, API integration, and Driver Assistance Functions testing. I have architected and deployed cloud-native solutions used across BMW plants globally, including comprehensive tracking tools and project management systems."
   },
   "sections": {
     "work": {
       "name": "Work Experience",
       "items": [
         {
-          "company": "BMW",
-          "position": "Software Developer Graduate",
+          "company": "BMW South Africa",
+          "position": "Software Engineer (Graduate)",
           "date": "Mar 2025 - Present",
-          "summary": "Key role in digitization and innovation, focusing on software development and Driving Assistant Functions testing (FAS) for the new X3 model."
+          "summary": "Responsible for digitalization and testing Driver Assistance Functions for X3 G45. Developed comprehensive tracking tool consolidating data from multiple sources, enabling technicians and engineers to manage testing cars efficiently. Architected and deployed full-stack solution using modern cloud-native architecture with AWS ECS Fargate. Created Spring Validation Tool deployed globally across BMW plants in South Africa, Germany, Mexico, USA, and China for visualizing car weight distribution and spring measurements."
         },
         {
-          "company": "BMW",
-          "position": "Software Developer Intern",
+          "company": "BMW South Africa",
+          "position": "Software Engineer (Intern)",
           "date": "Apr 2024 - Feb 2025",
-          "summary": "Contributed to system migration to AWS and dashboard development for X3-G45 tracking; optimized production insights through Oracle and Qlik Sense."
-        },
-        {
-          "company": "Technopreneurship Centre UJ",
-          "position": "Software Developer",
-          "date": "Jul 2023 - Dec 2023"
+          "summary": "Built Project Management Tool to manage all X3 G45 projects, automating data aggregation from multiple sources and replacing manual Excel processes. Deployed enterprise solution now used by entire BMW Plant 09 for project management steering. Reduced human errors through automation and enabled real-time data synchronization with web-based access to build plans."
         },
         {
           "company": "University of Johannesburg",
-          "position": "Assistant Lecturer & Software Development Tutor",
-          "date": "Feb 2022 - Nov 2023"
+          "position": "Software Development Tutor",
+          "date": "Feb 2023 - Nov 2023",
+          "summary": "Tutored and mentored students in software development module and programming fundamentals. Guided students through core programming concepts, provided one-on-one mentoring, and facilitated practical coding sessions and workshops."
         }
       ]
     },
@@ -40,7 +37,12 @@
         {
           "institution": "University of Johannesburg",
           "area": "MCom Information Technology",
-          "date": "2025 (In-Progress)"
+          "date": "2025 - Present"
+        },
+        {
+          "institution": "Henley Business School",
+          "area": "Higher Certificate in Management Practice",
+          "date": "2025 - Present"
         },
         {
           "institution": "University of Johannesburg",
@@ -52,7 +54,7 @@
           "institution": "University of Johannesburg",
           "area": "BCom Information Systems",
           "score": "cum laude",
-          "date": "2022"
+          "date": "2020 - 2022"
         },
         {
           "institution": "Lethabong Secondary School",
@@ -64,19 +66,36 @@
     "skills": {
       "name": "Technical Skills",
       "items": [
-        { "name": "Languages", "description": "Python, HTML5/CSS, C#, PHP, JavaScript, Shell Scripting (Bash), SQL" },
-        { "name": "Frameworks", "description": "Tailwind CSS, Bootstrap, Django, Flask, React, Node.js" },
-        { "name": "Cloud (AWS)", "description": "Lambda, EC2, S3, API Gateway, DynamoDB, QuickSight, Athena, Amplify" },
-        { "name": "Databases", "description": "MySQL, DynamoDB, MongoDB, MS SQL Server" },
-        { "name": "Tools", "description": "Postman, JIRA, Confluence, GitHub, Bitbucket, Docker, Agile/Scrum" }
+        { "name": "Frontend", "description": "React, Next.js, TypeScript, Tailwind CSS, Vue.js" },
+        { "name": "Backend", "description": "Node.js, Express, Python, Django, Java, Spring, GraphQL" },
+        { "name": "Databases", "description": "PostgreSQL, MongoDB, SQL, Oracle, AWS DynamoDB" },
+        { "name": "Cloud & DevOps", "description": "AWS (ECS, Fargate, Lambda, S3, API Gateway), Docker, Kubernetes, CI/CD, Terraform" },
+        { "name": "Tools", "description": "Git, GitHub, JIRA, Confluence, Postman, Agile/Scrum/Kanban" }
       ]
     },
     "certifications": {
       "name": "Certifications",
       "items": [
-        { "name": "AWS Certified Cloud Practitioner" },
-        { "name": "Google Associate Cloud Engineer" },
-        { "name": "Google Data Analytics" }
+        { "name": "AWS Certified Cloud Practitioner", "issuer": "Amazon Web Services", "date": "2025" },
+        { "name": "AWS Certified Developer - Associate", "issuer": "Amazon Web Services", "date": "2025" },
+        { "name": "AWS Certified CloudOps Engineer - Associate", "issuer": "Amazon Web Services", "date": "2025" }
+      ]
+    },
+    "achievements": {
+      "name": "Achievements",
+      "items": [
+        { "name": "Hackathon Mentor", "description": "Mentored participants in more than 5 different hackathons sponsored by Geekulcha", "date": "2023 - Present" },
+        { "name": "Career Path Speaker", "description": "Invited to speak to Grade 12 students about career paths in technology and software engineering", "date": "2023 - Present" }
+      ]
+    },
+    "references": {
+      "name": "References",
+      "items": [
+        { "name": "Klaas Senamela", "role": "Software Dev Engineer", "company": "AWS", "linkedIn": "https://www.linkedin.com/in/klaas-senamela-a69a76139/" },
+        { "name": "Koena Mabokela", "role": "Senior Lecturer & Head: Technopreneurship Centre", "company": "University of Johannesburg", "linkedIn": "https://www.linkedin.com/in/koena-mabokela-b4a18570/" },
+        { "name": "Karabo Maloka", "role": "Junior Developer", "company": "Paycorp Group", "linkedIn": "https://www.linkedin.com/in/karabo-maloka/" },
+        { "name": "Kerin Moodley", "role": "Data Analyst and Modeler", "company": "Investec", "linkedIn": "https://www.linkedin.com/in/kerin-moodley/" },
+        { "name": "Given Mahlaule", "role": "Digitalization Steering Specialist", "company": "BMW South Africa", "linkedIn": "https://www.linkedin.com/in/given-mahlaule-138708192/" }
       ]
     }
   }
