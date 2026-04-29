@@ -4,7 +4,6 @@ import Navigation from './components/Navigation';
 import Hero from './components/Hero';
 import Skills from './components/Skills';
 import Experience from './components/Experience';
-import Projects from './components/Projects';
 import Blog from './components/Blog';
 import BlogList from './components/BlogList';
 import BlogPost from './components/BlogPost';
@@ -25,7 +24,6 @@ function HomePage() {
       <Skills />
       <Experience />
       <Qualifications />
-      <Projects />
       <Testimonials />
       <Blog />
       <Contact />

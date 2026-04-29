@@ -1,25 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Send, Github, Linkedin, Twitter, Youtube } from 'lucide-react';
+import { Mail, Phone, MapPin, Github, Linkedin, Twitter, Youtube } from 'lucide-react';
 
 const Contact: React.FC = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission here
-    setIsSubmitted(true);
-    setTimeout(() => {
-      setFormData({ name: '', email: '', message: '' });
-      setIsSubmitted(false);
-    }, 3000);
-  };
 
   const contactInfo = [
     {
@@ -90,8 +73,7 @@ const Contact: React.FC = () => {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-12">
-            {/* Contact Info & Form */}
+          <div className="max-w-2xl mx-auto">
             <motion.div
               variants={containerVariants}
               initial="hidden"
@@ -140,77 +122,6 @@ const Contact: React.FC = () => {
                   ))}
                 </div>
               </div>
-            </motion.div>
-
-            {/* Contact Form */}
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              whileInView="visible"
-            >
-              <motion.form
-                variants={itemVariants}
-                onSubmit={handleSubmit}
-                className="bg-white dark:bg-slate-800 rounded-xl p-8 shadow-lg"
-              >
-                <div className="mb-6">
-                  <label htmlFor="name" className="block text-sm font-semibold text-slate-900 dark:text-white mb-2">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-pink-500 transition-all"
-                    placeholder="Your name"
-                  />
-                </div>
-
-                <div className="mb-6">
-                  <label htmlFor="email" className="block text-sm font-semibold text-slate-900 dark:text-white mb-2">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-pink-500 transition-all"
-                    placeholder="your@email.com"
-                  />
-                </div>
-
-                <div className="mb-6">
-                  <label htmlFor="message" className="block text-sm font-semibold text-slate-900 dark:text-white mb-2">
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    required
-                    rows={5}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-pink-500 transition-all resize-none"
-                    placeholder="Your message..."
-                  />
-                </div>
-
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  type="submit"
-                  className="cursor-pointer w-full px-6 py-3 bg-gradient-to-r from-purple-400 to-pink-500 text-white rounded-lg font-semibold hover:shadow-glow transition-all duration-300 flex items-center justify-center gap-2"
-                >
-                  <Send size={20} />
-                  {isSubmitted ? 'Message Sent!' : 'Send Message'}
-                </motion.button>
-              </motion.form>
             </motion.div>
           </div>
         </div>
