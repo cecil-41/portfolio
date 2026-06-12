@@ -57,9 +57,8 @@ const Testimonials: React.FC = () => {
   const currentTestimonial = testimonials[currentIndex];
 
   return (
-    <section id="testimonials" className="py-20 bg-white dark:bg-slate-800 relative overflow-hidden">
-      {/* Background Decoration */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(168,85,247,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.03)_1px,transparent_1px)] bg-size-[50px_50px] dark:bg-[linear-gradient(rgba(168,85,247,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.1)_1px,transparent_1px)]" />
+    <section id="testimonials" className="py-20 bg-slate-50 dark:bg-deep-900 relative overflow-hidden">
+      <div className="absolute inset-0 line-grid" />
       
       {/* Floating Quote Icons */}
       <motion.div
@@ -113,7 +112,7 @@ const Testimonials: React.FC = () => {
                   x: { type: "spring", stiffness: 300, damping: 30 },
                   opacity: { duration: 0.3 }
                 }}
-                className="bg-slate-50 dark:bg-slate-900 rounded-3xl p-8 md:p-12 shadow-xl w-full z-20"
+                className="bg-white dark:bg-deep-800 border border-slate-200/60 dark:border-purple-900/30 rounded-3xl p-8 md:p-12 shadow-card-hover w-full z-20"
                 drag="x"
                 dragConstraints={{ left: 0, right: 0 }}
                 dragElastic={0.8}
@@ -128,8 +127,8 @@ const Testimonials: React.FC = () => {
               >
               {/* Quote Icon */}
               <div className="flex justify-center mb-6">
-                <div className="p-4 rounded-full bg-linear-to-br from-purple-400/20 to-pink-500/20">
-                  <Quote size={32} className="text-purple-400" />
+                <div className="p-4 rounded-full bg-linear-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/20">
+                  <Quote size={32} className="text-purple-500 dark:text-purple-400" />
                 </div>
               </div>
 
@@ -184,7 +183,7 @@ const Testimonials: React.FC = () => {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={() => paginate(-1)}
-              className="p-3 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-purple-400 hover:text-white transition-all duration-300"
+              className="p-3 rounded-full bg-white dark:bg-deep-700 border border-slate-200/70 dark:border-purple-900/30 text-slate-600 dark:text-slate-300 hover:bg-purple-500 hover:border-purple-500 hover:text-white hover:shadow-glow transition-all duration-300"
               aria-label="Previous testimonial"
             >
               <ChevronLeft size={24} />
@@ -201,8 +200,8 @@ const Testimonials: React.FC = () => {
                   }}
                   className={`w-2 h-2 rounded-full transition-all duration-300 ${
                     index === currentIndex
-                      ? 'bg-purple-400 w-8'
-                      : 'bg-slate-300 dark:bg-slate-600 hover:bg-purple-400/50'
+                      ? 'bg-purple-500 w-8'
+                      : 'bg-slate-300 dark:bg-deep-600 hover:bg-purple-400/60'
                   }`}
                   aria-label={`Go to testimonial ${index + 1}`}
                 />
@@ -213,7 +212,7 @@ const Testimonials: React.FC = () => {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={() => paginate(1)}
-              className="p-3 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-purple-400 hover:text-white transition-all duration-300"
+              className="p-3 rounded-full bg-white dark:bg-deep-700 border border-slate-200/70 dark:border-purple-900/30 text-slate-600 dark:text-slate-300 hover:bg-purple-500 hover:border-purple-500 hover:text-white hover:shadow-glow transition-all duration-300"
               aria-label="Next testimonial"
             >
               <ChevronRight size={24} />

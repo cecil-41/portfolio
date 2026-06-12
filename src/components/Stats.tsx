@@ -103,9 +103,8 @@ const Stats: React.FC = () => {
   };
 
   return (
-    <section className="py-20 bg-slate-50 dark:bg-slate-900 relative overflow-hidden">
-      {/* Background Decoration */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(168,85,247,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.03)_1px,transparent_1px)] bg-[size:50px_50px] dark:bg-[linear-gradient(rgba(168,85,247,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.1)_1px,transparent_1px)]" />
+    <section className="py-20 bg-slate-50 dark:bg-deep-900 relative overflow-hidden">
+      <div className="absolute inset-0 dot-grid" />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
@@ -121,15 +120,15 @@ const Stats: React.FC = () => {
               <motion.div
                 key={index}
                 variants={itemVariants}
-                whileHover={{ scale: 1.05, y: -5 }}
-                className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300"
+                whileHover={{ scale: 1.04, y: -6 }}
+                className="card-glow p-8 shadow-card hover:shadow-card-hover transition-all duration-300"
               >
                 <div className="flex flex-col items-center text-center">
                   <div
-                    className={`p-4 rounded-xl bg-gradient-to-br ${
+                    className={`p-4 rounded-2xl bg-linear-to-br ${
                       index % 2 === 0
-                        ? 'from-purple-400/10 to-pink-500/10'
-                        : 'from-cyan-300/10 to-purple-400/10'
+                        ? 'from-purple-500/15 to-pink-500/15 dark:from-purple-500/20 dark:to-pink-500/20'
+                        : 'from-cyan-400/15 to-purple-500/15 dark:from-cyan-400/20 dark:to-purple-500/20'
                     } mb-4`}
                   >
                     <Icon size={32} className={stat.color} />

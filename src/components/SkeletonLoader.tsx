@@ -16,7 +16,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   height = '20px',
   count = 1,
 }) => {
-  const baseClasses = 'bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 dark:from-slate-700 dark:via-slate-600 dark:to-slate-700 animate-shimmer bg-[length:200%_100%]';
+  const baseClasses = 'bg-linear-to-r from-slate-200 via-slate-300 to-slate-200 dark:from-deep-700 dark:via-deep-600 dark:to-deep-700 animate-shimmer bg-[length:200%_100%]';
   
   const variantClasses = {
     text: 'rounded',
@@ -40,7 +40,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
 // Skeleton for Blog Post Card
 export const BlogPostSkeleton: React.FC = () => {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-lg">
+    <div className="bg-white dark:bg-deep-800 rounded-2xl overflow-hidden shadow-lg">
       <Skeleton variant="rectangular" height="200px" />
       <div className="p-6 space-y-4">
         <Skeleton variant="text" width="60%" height="24px" />
@@ -57,7 +57,7 @@ export const BlogPostSkeleton: React.FC = () => {
 // Skeleton for Project Card
 export const ProjectSkeleton: React.FC = () => {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-lg">
+    <div className="bg-white dark:bg-deep-800 rounded-2xl overflow-hidden shadow-lg">
       <Skeleton variant="rectangular" height="200px" />
       <div className="p-6 space-y-4">
         <Skeleton variant="text" width="70%" height="24px" />
@@ -75,7 +75,7 @@ export const ProjectSkeleton: React.FC = () => {
 // Skeleton for Experience Card
 export const ExperienceSkeleton: React.FC = () => {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-xl p-6 space-y-4">
+    <div className="bg-white dark:bg-deep-800 rounded-xl p-6 space-y-4">
       <div className="flex justify-between items-start">
         <div className="flex-1 space-y-2">
           <Skeleton variant="text" width="60%" height="24px" />
@@ -91,7 +91,7 @@ export const ExperienceSkeleton: React.FC = () => {
 // Skeleton for Skill Card
 export const SkillSkeleton: React.FC = () => {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-xl p-6 space-y-4">
+    <div className="bg-white dark:bg-deep-800 rounded-xl p-6 space-y-4">
       <div className="flex items-center gap-3 mb-4">
         <Skeleton variant="circular" width="40px" height="40px" />
         <Skeleton variant="text" width="120px" height="20px" />

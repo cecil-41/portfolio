@@ -53,8 +53,9 @@ const Skills: React.FC = () => {
   };
 
   return (
-    <section id="skills" className="py-20 px-4 sm:px-6 lg:px-8 bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
-      <div className="max-w-6xl mx-auto">
+    <section id="skills" className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-deep-800 relative overflow-hidden">
+      <div className="absolute inset-0 line-grid" />
+      <div className="max-w-6xl mx-auto relative z-10">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -85,10 +86,10 @@ const Skills: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setActiveCategory(index)}
-              className={`cursor-pointer px-6 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center gap-2 ${
+              className={`cursor-pointer px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center gap-2 ${
                 activeCategory === index
                   ? `bg-linear-to-r ${category.color} text-white shadow-glow`
-                  : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600'
+                  : 'bg-white dark:bg-deep-700 border border-slate-200/70 dark:border-purple-900/30 text-slate-700 dark:text-slate-300 hover:border-purple-400/40 hover:text-purple-600 dark:hover:text-purple-400'
               }`}
             >
               {category.icon}
@@ -108,7 +109,7 @@ const Skills: React.FC = () => {
             <motion.div
               key={idx}
               variants={itemVariants}
-              className="group relative bg-white dark:bg-slate-700 rounded-xl p-6 overflow-hidden hover:shadow-lg transition-all duration-300"
+              className="group relative card-glow p-6 overflow-hidden shadow-card hover:shadow-card-hover"
             >
               {/* Gradient Border */}
               <div className={`absolute inset-0 bg-linear-to-r ${skillCategories[activeCategory].color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
@@ -116,7 +117,7 @@ const Skills: React.FC = () => {
               <div className="relative z-10">
                 <div className="flex justify-between items-start mb-4">
                   <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{skill.name}</h3>
-                  <span className="text-sm font-medium text-purple-400 dark:text-cyan-300">
+                  <span className="text-sm font-semibold text-purple-500 dark:text-purple-400">
                     {skill.years}y
                   </span>
                 </div>
@@ -125,7 +126,7 @@ const Skills: React.FC = () => {
                 <div className="mb-3">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-sm text-slate-600 dark:text-slate-400">Proficiency</span>
-                    <span className="text-sm font-semibold text-purple-400">{skill.level}%</span>
+                    <span className="text-sm font-bold text-purple-500 dark:text-purple-400">{skill.level}%</span>
                   </div>
                   <div className="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-full overflow-hidden">
                     <motion.div

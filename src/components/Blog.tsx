@@ -51,8 +51,9 @@ const Blog: React.FC = () => {
   };
 
   return (
-    <section id="blog" className="py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
+    <section id="blog" className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-deep-950 relative overflow-hidden">
+      <div className="absolute inset-0 dot-grid opacity-40" />
+      <div className="max-w-6xl mx-auto relative z-10">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -82,7 +83,7 @@ const Blog: React.FC = () => {
               <motion.article
                 key={post.id}
                 variants={itemVariants}
-                className="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full"
+                className="group bg-white dark:bg-deep-800 rounded-xl overflow-hidden border border-slate-200/70 dark:border-purple-900/30 shadow-card hover:shadow-card-hover hover:border-purple-400/40 dark:hover:border-purple-500/40 transition-all duration-300 flex flex-col h-full"
               >
                 <Link to={`/blog/${post.slug}`} className="flex flex-col h-full">
                   {/* Image */}
@@ -93,7 +94,7 @@ const Blog: React.FC = () => {
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     />
                     <div className="absolute top-4 right-4">
-                      <span className="inline-block px-3 py-1 bg-purple-400 text-white text-xs font-semibold rounded-full">
+                      <span className="inline-block px-3 py-1 bg-linear-to-r from-purple-500 to-pink-500 text-white text-xs font-semibold rounded-full shadow-glow">
                         {post.category}
                       </span>
                     </div>
@@ -124,7 +125,7 @@ const Blog: React.FC = () => {
                     {/* Read More Button */}
                     <motion.div
                       whileHover={{ x: 4 }}
-                      className="inline-flex items-center gap-2 text-purple-400 dark:text-cyan-300 font-semibold hover:gap-3 transition-all"
+                      className="inline-flex items-center gap-2 text-purple-500 dark:text-purple-400 font-semibold hover:gap-3 transition-all"
                     >
                       Read More
                       <ArrowRight size={16} />
@@ -144,7 +145,7 @@ const Blog: React.FC = () => {
           >
             <Link
               to="/blog"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-linear-to-r from-purple-400 to-pink-500 text-white rounded-lg font-semibold shadow-lg hover:shadow-glow transition-all"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-linear-to-r from-purple-500 to-pink-500 text-white rounded-xl font-semibold shadow-glow hover:shadow-glow-pink transition-all"
               style={{ color: 'white' }}
             >
               View All Articles

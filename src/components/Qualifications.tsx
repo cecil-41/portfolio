@@ -77,9 +77,8 @@ const Qualifications: React.FC = () => {
   };
 
   return (
-    <section id="qualifications" className="py-20 bg-white dark:bg-slate-800 relative overflow-hidden">
-      {/* Background Decoration */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(168,85,247,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.03)_1px,transparent_1px)] bg-size-[50px_50px] dark:bg-[linear-gradient(rgba(168,85,247,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.1)_1px,transparent_1px)]" />
+    <section id="qualifications" className="py-20 bg-white dark:bg-deep-800 relative overflow-hidden">
+      <div className="absolute inset-0 dot-grid opacity-60" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
@@ -106,7 +105,7 @@ const Qualifications: React.FC = () => {
             rel="noopener noreferrer"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-linear-to-r from-purple-400 to-pink-500 text-white rounded-lg font-semibold shadow-lg hover:shadow-glow transition-all duration-300"
+            className="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-linear-to-r from-purple-500 to-pink-500 text-white rounded-xl font-semibold shadow-glow hover:shadow-glow-pink transition-all duration-300"
           >
             <ExternalLink size={20} className="text-white" />
             <span className="text-white">View All Certificates</span>
@@ -127,10 +126,10 @@ const Qualifications: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setActiveFilter(filter.id)}
-              className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
+              className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
                 activeFilter === filter.id
-                  ? 'bg-linear-to-r from-purple-400 to-pink-500 text-white shadow-lg'
-                  : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+                  ? 'bg-linear-to-r from-purple-500 to-pink-500 text-white shadow-glow'
+                  : 'bg-slate-100/80 dark:bg-deep-700 border border-slate-200/70 dark:border-purple-900/30 text-slate-700 dark:text-slate-300 hover:border-purple-400/40 hover:text-purple-600 dark:hover:text-purple-400'
               }`}
             >
               {filter.label}
@@ -153,7 +152,7 @@ const Qualifications: React.FC = () => {
                 key={qualification.id}
                 variants={itemVariants}
                 whileHover={{ y: -5, scale: 1.02 }}
-                className="bg-slate-50 dark:bg-slate-900 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300"
+                className="card-glow p-6 shadow-card hover:shadow-card-hover"
               >
                 <div className="flex items-start gap-4">
                   {/* Icon */}

@@ -50,8 +50,9 @@ const Projects: React.FC = () => {
   };
 
   return (
-    <section id="projects" className="py-20 px-4 sm:px-6 lg:px-8 bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
-      <div className="max-w-6xl mx-auto">
+    <section id="projects" className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-deep-900 relative overflow-hidden">
+      <div className="absolute inset-0 line-grid" />
+      <div className="max-w-6xl mx-auto relative z-10">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -90,7 +91,7 @@ const Projects: React.FC = () => {
               onClick={() => _setSelectedProject(project.id)}
               className="group cursor-pointer"
             >
-              <div className="relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 h-full flex flex-col">
+              <div className="relative bg-white dark:bg-deep-800 rounded-xl overflow-hidden border border-slate-200/70 dark:border-purple-900/30 shadow-card hover:shadow-card-hover hover:border-purple-400/40 dark:hover:border-purple-500/40 transition-all duration-300 h-full flex flex-col">
                 {/* Image Container */}
                 <div className="relative h-48 overflow-hidden bg-slate-200 dark:bg-slate-700">
                   <img
@@ -117,7 +118,7 @@ const Projects: React.FC = () => {
                     {project.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="px-2 py-1 bg-purple-400/10 text-purple-400 dark:bg-pink-500/10 dark:text-pink-500 text-xs rounded-full font-medium"
+                        className="tag text-xs py-0.5"
                       >
                         {tag}
                       </span>
@@ -133,7 +134,7 @@ const Projects: React.FC = () => {
                         href={project.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-linear-to-r from-purple-400 to-pink-500 text-white rounded-lg text-sm font-semibold hover:shadow-glow transition-all shadow-md"
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-linear-to-r from-purple-500 to-pink-500 text-white rounded-xl text-sm font-semibold shadow-glow hover:shadow-glow-pink transition-all"
                       >
                         <ExternalLink size={16} className="text-white" />
                         <span className="text-white">Live</span>
@@ -145,7 +146,7 @@ const Projects: React.FC = () => {
                       href={project.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`cursor-pointer ${project.link === "#" ? 'flex-1' : 'flex-1'} flex items-center justify-center gap-2 px-4 py-2 border-2 border-purple-400 text-purple-400 dark:border-pink-500 dark:text-pink-500 rounded-lg text-sm font-semibold hover:bg-purple-400/10 transition-all`}
+                      className="cursor-pointer flex-1 flex items-center justify-center gap-2 px-4 py-2 border-2 border-purple-500/60 dark:border-purple-400/50 text-purple-600 dark:text-purple-400 rounded-xl text-sm font-semibold hover:bg-purple-500/10 hover:border-purple-500 hover:shadow-glow transition-all"
                     >
                       <Github size={16} />
                       Code

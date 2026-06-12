@@ -61,7 +61,7 @@ const BlogList: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-900 pt-20">
+    <div className="min-h-screen bg-white dark:bg-deep-950 pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Breadcrumb */}
         <motion.nav
@@ -108,7 +108,7 @@ const BlogList: React.FC = () => {
               placeholder="Search articles..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition-all"
+              className="w-full pl-12 pr-4 py-3 bg-white dark:bg-deep-800 border border-slate-200 dark:border-purple-900/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition-all"
             />
           </div>
         </motion.div>
@@ -126,10 +126,10 @@ const BlogList: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setSelectedCategory(category)}
-              className={`cursor-pointer px-4 py-2 rounded-lg capitalize font-medium transition-all duration-300 ${
+              className={`cursor-pointer px-4 py-2 rounded-xl capitalize font-semibold transition-all duration-300 ${
                 selectedCategory === category
-                  ? 'bg-linear-to-r from-purple-400 to-pink-500 text-white shadow-glow'
-                  : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
+                  ? 'bg-linear-to-r from-purple-500 to-pink-500 text-white shadow-glow'
+                  : 'bg-white dark:bg-deep-800 border border-slate-200/70 dark:border-purple-900/30 text-slate-600 dark:text-slate-300 hover:border-purple-400/40 hover:text-purple-500 dark:hover:text-purple-400'
               }`}
             >
               {category}
@@ -150,18 +150,18 @@ const BlogList: React.FC = () => {
               <motion.article
                 key={post.id}
                 variants={itemVariants}
-                className="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full"
+                className="group bg-white dark:bg-deep-800 rounded-xl overflow-hidden border border-slate-200/70 dark:border-purple-900/30 shadow-card hover:shadow-card-hover hover:border-purple-400/40 dark:hover:border-purple-500/40 transition-all duration-300 flex flex-col h-full"
               >
                 <Link to={`/blog/${post.slug}`} className="flex flex-col h-full">
                   {/* Image */}
-                  <div className="relative h-48 overflow-hidden bg-slate-200 dark:bg-slate-700">
+                  <div className="relative h-48 overflow-hidden bg-slate-200 dark:bg-deep-700">
                     <img
                       src={post.image}
                       alt={post.title}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     />
                     <div className="absolute top-4 right-4">
-                      <span className="inline-block px-3 py-1 bg-purple-400 text-white text-xs font-semibold rounded-full">
+                      <span className="inline-block px-3 py-1 bg-linear-to-r from-purple-500 to-pink-500 text-white text-xs font-semibold rounded-full shadow-glow">
                         {post.category}
                       </span>
                     </div>
@@ -177,7 +177,7 @@ const BlogList: React.FC = () => {
                     </p>
 
                     {/* Meta */}
-                    <div className="flex items-center gap-4 text-xs text-slate-500 dark:text-slate-400 mb-4 border-t border-slate-200 dark:border-slate-700 pt-4">
+                    <div className="flex items-center gap-4 text-xs text-slate-500 dark:text-slate-400 mb-4 border-t border-slate-200 dark:border-purple-900/30 pt-4">
                       <div className="flex items-center gap-1">
                         <Calendar size={14} />
                         {formatDate(post.date)}
@@ -192,7 +192,7 @@ const BlogList: React.FC = () => {
                     {/* Read More Button */}
                     <motion.div
                       whileHover={{ x: 4 }}
-                      className="inline-flex items-center gap-2 text-purple-400 dark:text-cyan-300 font-semibold hover:gap-3 transition-all"
+                      className="inline-flex items-center gap-2 text-purple-500 dark:text-purple-400 font-semibold hover:gap-3 transition-all"
                     >
                       Read More
                       <ArrowRight size={16} />

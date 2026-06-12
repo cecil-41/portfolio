@@ -63,12 +63,12 @@ const Hero: React.FC = () => {
 
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 sm:pt-16">
-      {/* Advanced 3D Tech Background */}
+      {/* Background */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-linear-to-br from-slate-50 via-slate-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800" />
-        
-        {/* Grid Pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(168,85,247,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.03)_1px,transparent_1px)] bg-size-[50px_50px] dark:bg-[linear-gradient(rgba(168,85,247,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.1)_1px,transparent_1px)]" />
+        <div className="absolute inset-0 bg-linear-to-br from-slate-50 via-purple-50/30 to-slate-100 dark:from-deep-950 dark:via-deep-900 dark:to-deep-800" />
+
+        {/* Dot grid */}
+        <div className="absolute inset-0 dot-grid opacity-60" />
         
         {/* Floating Tech Logos */}
         {[
@@ -87,7 +87,7 @@ const Hero: React.FC = () => {
         ].map((item, i) => (
           <motion.div
             key={i}
-            className="absolute text-purple-400/40 dark:text-purple-400/60"
+            className="absolute text-purple-500/25 dark:text-purple-400/50"
             style={{ left: item.x, top: item.y }}
             animate={{
               y: [-20, 20, -20],
@@ -179,24 +179,21 @@ const Hero: React.FC = () => {
           </defs>
         </svg>
         
-        {/* Animated Gradient Orbs */}
+        {/* Gradient orbs */}
         <motion.div
-          animate={{
-            x: [0, 100, 0],
-            y: [0, 50, 0],
-            scale: [1, 1.2, 1],
-          }}
+          animate={{ x: [0, 80, 0], y: [0, 40, 0], scale: [1, 1.15, 1] }}
           transition={{ duration: 20, repeat: Infinity }}
-          className="absolute -top-40 -right-40 w-80 h-80 bg-linear-to-br from-purple-400/20 to-pink-500/20 rounded-full blur-3xl"
+          className="absolute -top-40 -right-40 w-150 h-150 bg-linear-to-br from-purple-500/30 to-pink-500/20 rounded-full blur-3xl"
         />
         <motion.div
-          animate={{
-            x: [0, -100, 0],
-            y: [0, -50, 0],
-            scale: [1, 1.2, 1],
-          }}
+          animate={{ x: [0, -80, 0], y: [0, -40, 0], scale: [1, 1.15, 1] }}
           transition={{ duration: 25, repeat: Infinity }}
-          className="absolute -bottom-40 -left-40 w-80 h-80 bg-linear-to-br from-cyan-300/20 to-purple-400/20 rounded-full blur-3xl"
+          className="absolute -bottom-40 -left-40 w-125 h-125 bg-linear-to-br from-cyan-400/20 to-purple-500/25 rounded-full blur-3xl"
+        />
+        <motion.div
+          animate={{ x: [0, 50, -30, 0], y: [0, -60, 20, 0] }}
+          transition={{ duration: 30, repeat: Infinity }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-100 h-100 bg-purple-600/10 dark:bg-purple-600/20 rounded-full blur-3xl"
         />
         
         {/* Floating Particles */}
@@ -227,8 +224,9 @@ const Hero: React.FC = () => {
         <motion.div variants={containerVariants} initial="hidden" animate="visible">
           {/* Badge */}
           <motion.div variants={itemVariants} className="mb-6">
-            <div className="inline-block px-4 py-2 bg-purple-400/10 border border-purple-400/30 rounded-full">
-              <span className="text-purple-400 font-medium text-sm">Welcome to my portfolio</span>
+            <div className="inline-flex items-center gap-2 px-5 py-2 glass rounded-full border border-purple-400/30 dark:border-purple-400/25 shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse-glow" />
+              <span className="text-purple-600 dark:text-purple-300 font-semibold text-sm tracking-wide">Welcome to my portfolio</span>
             </div>
           </motion.div>
 
@@ -250,19 +248,19 @@ const Hero: React.FC = () => {
           {/* CTA Buttons */}
           <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
               onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-              className="cursor-pointer px-8 py-4 bg-linear-to-r from-purple-400 to-pink-500 text-white rounded-lg font-semibold hover:shadow-glow transition-all duration-300"
+              className="cursor-pointer px-8 py-4 bg-linear-to-r from-purple-500 to-pink-500 text-white rounded-xl font-semibold shadow-glow hover:shadow-glow-pink transition-all duration-300"
             >
               View My Projects
             </motion.button>
             <motion.a
               href="/portfolio/resume.pdf"
               download="Cecil_Resume.pdf"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="cursor-pointer px-8 py-4 border-2 border-purple-400 text-purple-400 dark:text-cyan-300 rounded-lg font-semibold hover:bg-purple-400/10 transition-all duration-300 text-center"
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              className="cursor-pointer px-8 py-4 border-2 border-purple-500/70 dark:border-purple-400/60 text-purple-600 dark:text-purple-300 rounded-xl font-semibold hover:bg-purple-500/10 hover:border-purple-500 hover:shadow-glow transition-all duration-300 text-center backdrop-blur-sm"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -285,7 +283,7 @@ const Hero: React.FC = () => {
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-purple-400 dark:hover:text-pink-500 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all duration-300"
+                className="p-3 rounded-xl bg-slate-100/80 dark:bg-deep-700/80 border border-slate-200/60 dark:border-purple-900/40 text-slate-600 dark:text-slate-300 hover:text-purple-500 dark:hover:text-purple-400 hover:border-purple-400/40 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all duration-300"
               >
                 <Icon size={24} />
               </motion.a>

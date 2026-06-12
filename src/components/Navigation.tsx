@@ -115,7 +115,7 @@ const Navigation: React.FC = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
-      className="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800"
+      className="fixed top-0 w-full z-50 bg-white/85 dark:bg-deep-950/85 backdrop-blur-xl border-b border-slate-200/60 dark:border-purple-900/30"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
@@ -125,10 +125,10 @@ const Navigation: React.FC = () => {
             onClick={handleLogoClick}
             className="flex items-center cursor-pointer"
           >
-            <div className="relative w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-500 rounded-lg flex items-center justify-center">
+            <div className="relative w-10 h-10 bg-linear-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-glow">
               <span className="font-bold text-white font-display">C</span>
             </div>
-            <span className="ml-2 font-bold text-2xl font-display bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+            <span className="ml-2 font-bold text-2xl font-display bg-linear-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
               Cecil
             </span>
           </motion.div>
@@ -142,17 +142,17 @@ const Navigation: React.FC = () => {
                   key={item.name}
                   onClick={() => handleNavClick(item.href)}
                   whileHover={{ scale: 1.05 }}
-                  className={`cursor-pointer transition-colors font-medium relative ${
+                  className={`cursor-pointer transition-colors font-semibold relative ${
                     isActive
-                      ? 'text-purple-400 dark:text-pink-500'
-                      : 'text-slate-700 dark:text-slate-300 hover:text-purple-400 dark:hover:text-pink-500'
+                      ? 'text-purple-500 dark:text-purple-400'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-purple-500 dark:hover:text-purple-400'
                   }`}
                 >
                   {item.name}
                   {isActive && (
                     <motion.div
                       layoutId="activeSection"
-                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-400 to-pink-500"
+                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-linear-to-r from-purple-500 to-pink-500"
                       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -167,7 +167,7 @@ const Navigation: React.FC = () => {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={toggleTheme}
-              className="cursor-pointer p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+              className="cursor-pointer p-2 rounded-xl bg-slate-100/80 dark:bg-deep-700/80 border border-slate-200/60 dark:border-purple-900/30 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:border-purple-400/30 transition-all duration-200"
             >
               {isDark ? <Sun size={20} /> : <Moon size={20} />}
             </motion.button>
@@ -177,7 +177,7 @@ const Navigation: React.FC = () => {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsOpen(!isOpen)}
-              className="cursor-pointer md:hidden p-2 rounded-lg bg-slate-100 dark:bg-slate-800"
+              className="cursor-pointer md:hidden p-2 rounded-xl bg-slate-100/80 dark:bg-deep-700/80 border border-slate-200/60 dark:border-purple-900/30"
             >
               {isOpen ? <X size={20} /> : <Menu size={20} />}
             </motion.button>
@@ -190,7 +190,7 @@ const Navigation: React.FC = () => {
         initial={{ opacity: 0, height: 0 }}
         animate={{ opacity: isOpen ? 1 : 0, height: isOpen ? 'auto' : 0 }}
         transition={{ duration: 0.3 }}
-        className="md:hidden overflow-hidden bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800"
+        className="md:hidden overflow-hidden bg-white/95 dark:bg-deep-950/95 backdrop-blur-xl border-t border-slate-200/60 dark:border-purple-900/30"
       >
         <div className="px-4 py-4 space-y-2">
           {navItems.map((item) => {
@@ -202,8 +202,8 @@ const Navigation: React.FC = () => {
                 whileHover={{ x: 4 }}
                 className={`cursor-pointer w-full text-left px-4 py-2 rounded-lg transition-colors ${
                   isActive
-                    ? 'bg-gradient-to-r from-purple-400 to-pink-500 text-white'
-                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                    ? 'bg-linear-to-r from-purple-500 to-pink-500 text-white shadow-glow'
+                    : 'text-slate-600 dark:text-slate-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-500 dark:hover:text-purple-400'
                 }`}
               >
                 {item.name}

@@ -39,7 +39,8 @@ const Experience: React.FC = () => {
   };
 
   return (
-    <section id="experience" className="py-20 px-4 sm:px-6 lg:px-8">
+    <section id="experience" className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-deep-950 relative overflow-hidden">
+      <div className="absolute inset-0 dot-grid opacity-50" />
       <div className="max-w-4xl mx-auto">
         {/* Section Header */}
         <motion.div
@@ -49,7 +50,7 @@ const Experience: React.FC = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl sm:text-5xl font-bold font-display mb-4">
-            <span className="bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
               Professional Experience
             </span>
           </h2>
@@ -63,7 +64,7 @@ const Experience: React.FC = () => {
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          className="space-y-6"
+          className="space-y-6 relative z-10"
         >
           {experiences.map((exp, index) => (
             <motion.div key={exp.id} variants={itemVariants}>
@@ -71,13 +72,13 @@ const Experience: React.FC = () => {
                 onClick={() => setExpandedId(expandedId === exp.id ? null : exp.id)}
                 className="cursor-pointer w-full text-left"
               >
-                <div className="group relative bg-white dark:bg-slate-800 rounded-xl p-6 hover:shadow-lg transition-all duration-300 border border-slate-200 dark:border-slate-700 hover:border-purple-400/50 dark:hover:border-pink-500/50">
+                <div className="group relative bg-white dark:bg-deep-800 rounded-xl p-6 shadow-card hover:shadow-card-hover transition-all duration-300 border border-slate-200/70 dark:border-purple-900/30 hover:border-purple-400/50 dark:hover:border-purple-500/40">
                   {/* Timeline Indicator */}
-                  <div className="absolute -left-4 top-8 w-8 h-8 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full border-4 border-white dark:border-slate-900 shadow-glow" />
+                  <div className="absolute -left-4 top-8 w-8 h-8 bg-linear-to-r from-purple-500 to-pink-500 rounded-full border-4 border-white dark:border-deep-950 shadow-glow" />
 
                   {/* Timeline Line */}
                   {index < experiences.length - 1 && (
-                    <div className="absolute -left-[14px] top-16 w-1 h-24 bg-gradient-to-b from-purple-400 to-pink-500 opacity-50" />
+                    <div className="absolute -left-[14px] top-16 w-1 h-24 bg-linear-to-b from-purple-400 to-pink-500 opacity-50" />
                   )}
 
                   <div className="flex justify-between items-start">
@@ -115,7 +116,7 @@ const Experience: React.FC = () => {
                 transition={{ duration: 0.3 }}
                 className="overflow-hidden"
               >
-                <div className="p-6 bg-slate-50 dark:bg-slate-700/50 border border-t-0 border-slate-200 dark:border-slate-700 rounded-b-xl">
+                <div className="p-6 bg-slate-50/80 dark:bg-deep-700/60 border border-t-0 border-slate-200/70 dark:border-purple-900/30 rounded-b-xl">
                   {/* Achievements */}
                   <div className="mb-6">
                     <h4 className="font-bold text-slate-900 dark:text-white mb-3">Key Achievements</h4>
@@ -136,7 +137,7 @@ const Experience: React.FC = () => {
                       {exp.technologies.map((tech) => (
                         <span
                           key={tech}
-                          className="px-3 py-1 bg-purple-400/10 text-purple-400 dark:bg-pink-500/10 dark:text-pink-500 rounded-lg text-sm font-medium"
+                          className="tag"
                         >
                           {tech}
                         </span>

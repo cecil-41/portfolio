@@ -95,7 +95,7 @@ const BlogPost: React.FC = () => {
 
   if (!blog) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-slate-900">
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-deep-950">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">
             Blog Post Not Found
@@ -121,7 +121,7 @@ const BlogPost: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-900 pt-20">
+    <div className="min-h-screen bg-white dark:bg-deep-950 pt-20">
       {/* SEO Meta Tags */}
       {blog && (
         <SEO
@@ -136,7 +136,7 @@ const BlogPost: React.FC = () => {
       )}
 
       {/* Reading Progress Bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-slate-200 dark:bg-slate-700">
+      <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-slate-200/50 dark:bg-deep-800">
         <motion.div
           className="h-full bg-linear-to-r from-purple-400 to-pink-500"
           style={{ width: `${scrollProgress}%` }}
@@ -200,7 +200,7 @@ const BlogPost: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate('/blog')}
-              className="inline-flex items-center gap-2 px-4 py-2 border-2 border-purple-400 text-purple-400 dark:border-cyan-300 dark:text-cyan-300 bg-white/10 dark:bg-slate-900/50 backdrop-blur-sm rounded-full font-semibold hover:bg-purple-400/10 dark:hover:bg-cyan-300/10 transition-all shadow-lg"
+              className="inline-flex items-center gap-2 px-4 py-2 border-2 border-purple-400 text-purple-400 dark:border-cyan-300 dark:text-cyan-300 bg-white/10 dark:bg-deep-950/50 backdrop-blur-sm rounded-full font-semibold hover:bg-purple-400/10 dark:hover:bg-cyan-300/10 transition-all shadow-lg"
             >
               <ArrowLeft size={18} />
               <span className="hidden sm:inline">Back to All Articles</span>
@@ -231,7 +231,7 @@ const BlogPost: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="flex flex-wrap items-center justify-between gap-4 mb-8 pb-8 border-b border-slate-200 dark:border-slate-700"
+          className="flex flex-wrap items-center justify-between gap-4 mb-8 pb-8 border-b border-slate-200 dark:border-purple-900/30"
         >
           <div className="flex flex-wrap gap-4 text-slate-600 dark:text-slate-400">
             <div className="flex items-center gap-2">
@@ -252,7 +252,7 @@ const BlogPost: React.FC = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={shareBlog}
-            className="flex items-center gap-2 px-4 py-2 bg-purple-100 dark:bg-slate-800 text-purple-600 dark:text-purple-400 rounded-lg font-medium hover:bg-purple-200 dark:hover:bg-slate-700 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-purple-100/80 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-500/30 text-purple-600 dark:text-purple-400 rounded-xl font-medium hover:bg-purple-200/80 dark:hover:bg-purple-900/30 transition-colors"
           >
             {shareSuccess ? (
               <>
@@ -335,7 +335,7 @@ const BlogPost: React.FC = () => {
                       </code>
                     </div>
                   ) : (
-                    <code className="bg-slate-200 dark:bg-slate-700 px-1.5 py-0.5 rounded text-sm font-mono text-slate-800 dark:text-slate-200" {...props}>
+                    <code className="bg-slate-200 dark:bg-deep-700 px-1.5 py-0.5 rounded text-sm font-mono text-slate-800 dark:text-slate-200" {...props}>
                       {children}
                     </code>
                   );
@@ -367,7 +367,7 @@ const BlogPost: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-700"
+            className="mt-12 pt-8 border-t border-slate-200 dark:border-purple-900/30"
           >
             <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-6">
               References & Further Reading
@@ -380,7 +380,7 @@ const BlogPost: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ x: 5 }}
-                  className="flex items-start gap-3 p-4 rounded-lg bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group border border-slate-200 dark:border-slate-700"
+                  className="flex items-start gap-3 p-4 rounded-xl card-glow hover:shadow-card-hover group"
                 >
                   <ExternalLink size={20} className="mt-0.5 text-purple-500 shrink-0" />
                   <div className="flex-1">
@@ -402,7 +402,7 @@ const BlogPost: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7 }}
-          className="mt-16 pt-8 border-t border-slate-200 dark:border-slate-700 text-center"
+          className="mt-16 pt-8 border-t border-slate-200 dark:border-purple-900/30 text-center"
         >
           <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-4">
             Enjoyed this article?
@@ -412,7 +412,7 @@ const BlogPost: React.FC = () => {
           </p>
           <Link
             to="/blog"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-linear-to-r from-purple-400 to-pink-500 text-white rounded-lg font-semibold shadow-lg hover:shadow-glow transition-all"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-linear-to-r from-purple-500 to-pink-500 text-white rounded-xl font-semibold shadow-glow hover:shadow-glow-pink transition-all"
             style={{ color: 'white' }}
           >
             View All Articles
