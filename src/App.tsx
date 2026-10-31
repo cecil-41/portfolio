@@ -1,5 +1,5 @@
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
-import { ThemeProvider } from './hooks/useTheme';
+import { ThemeProvider } from './hooks/ThemeProvider';
 import Navigation from './components/Navigation';
 import Hero from './components/Hero';
 import Skills from './components/Skills';
@@ -14,6 +14,7 @@ import BackToTop from './components/BackToTop';
 import Testimonials from './components/Testimonials';
 import Qualifications from './components/Qualifications';
 import SEO from './components/SEO';
+import Footer from './components/Footer';
 
 function HomePage() {
   return (
@@ -42,6 +43,7 @@ function App() {
           <Route path="/blog" element={<BlogList />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
         </Routes>
+        <Footer />
         <BackToTop />
       </Router>
     </ThemeProvider>

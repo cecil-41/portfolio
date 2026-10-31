@@ -15,7 +15,7 @@ interface Project {
 }
 
 const Projects: React.FC = () => {
-  const [_selectedProject, _setSelectedProject] = useState<number | null>(null);
+  const [, setSelectedProject] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const projects: Project[] = projectsData;
@@ -60,7 +60,7 @@ const Projects: React.FC = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl sm:text-5xl font-bold font-display mb-4">
-            <span className="bg-linear-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-accent to-accent-2 bg-clip-text text-transparent">
               Featured Projects
             </span>
           </h2>
@@ -87,7 +87,7 @@ const Projects: React.FC = () => {
             <motion.div
               key={project.id}
               variants={itemVariants}
-              onClick={() => _setSelectedProject(project.id)}
+              onClick={() => setSelectedProject(project.id)}
               className="group cursor-pointer"
             >
               <div className="relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 h-full flex flex-col">
@@ -105,7 +105,7 @@ const Projects: React.FC = () => {
 
                 {/* Content */}
                 <div className="p-6 flex-1 flex flex-col">
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-400 transition-colors">
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-accent-ink transition-colors">
                     {project.title}
                   </h3>
                   <p className="text-sm text-slate-600 dark:text-slate-400 mb-4 flex-1">
@@ -117,7 +117,7 @@ const Projects: React.FC = () => {
                     {project.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="px-2 py-1 bg-purple-400/10 text-purple-400 dark:bg-pink-500/10 dark:text-pink-500 text-xs rounded-full font-medium"
+                        className="px-2 py-1 bg-accent/10 text-accent-ink text-xs rounded-full font-medium"
                       >
                         {tag}
                       </span>
@@ -133,7 +133,7 @@ const Projects: React.FC = () => {
                         href={project.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-linear-to-r from-purple-400 to-pink-500 text-white rounded-lg text-sm font-semibold hover:shadow-glow transition-all shadow-md"
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-linear-to-r from-accent to-accent-2 text-on-accent rounded-lg text-sm font-semibold transition-all shadow-md"
                       >
                         <ExternalLink size={16} className="text-white" />
                         <span className="text-white">Live</span>
@@ -145,7 +145,7 @@ const Projects: React.FC = () => {
                       href={project.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`cursor-pointer ${project.link === "#" ? 'flex-1' : 'flex-1'} flex items-center justify-center gap-2 px-4 py-2 border-2 border-purple-400 text-purple-400 dark:border-pink-500 dark:text-pink-500 rounded-lg text-sm font-semibold hover:bg-purple-400/10 transition-all`}
+                      className={`cursor-pointer ${project.link === "#" ? 'flex-1' : 'flex-1'} flex items-center justify-center gap-2 px-4 py-2 border-2 border-accent text-accent-ink rounded-lg text-sm font-semibold hover:bg-accent/10 transition-all`}
                     >
                       <Github size={16} />
                       Code

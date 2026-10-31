@@ -1,227 +1,284 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Quote, ChevronLeft, ChevronRight, Star, Linkedin } from 'lucide-react';
+import React, { useCallback, useRef, useState } from 'react';
+import type { FocusEvent, KeyboardEvent } from 'react';
+import { motion, useInView } from 'framer-motion';
+import { ArrowLeft, ArrowRight, Pause, Play } from 'lucide-react';
+import { FaLinkedinIn } from 'react-icons/fa6';
 import testimonialsData from '../data/testimonials.json';
+import { EASE_OUT, Reveal, Section, SectionHeading, useReducedMotion } from './ui';
 
 interface Testimonial {
   id: number;
   name: string;
   role: string;
   company: string;
+  /** Path relative to the public folder, e.g. "profiles/klaas.jpg". */
   image: string;
   content: string;
   rating: number;
   linkedIn: string;
 }
 
+const testimonials = testimonialsData as Testimonial[];
+const COUNT = testimonials.length;
+
+const asset = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
+/** A 192px WebP sits next to each original JPG; the JPG stays as the fallback. */
+const thumb = (path: string) => asset(path.replace(/\.jpe?g$/i, '-192.webp'));
+
+const pad = (n: number) => String(n).padStart(2, '0');
+
+const Avatar: React.FC<{ t: Testimonial; size: number; className?: string }> = ({
+  t,
+  size,
+  className = '',
+}) => (
+  <picture>
+    <source type="image/webp" srcSet={thumb(t.image)} />
+    <img
+      src={asset(t.image)}
+      alt={t.name}
+      width={size}
+      height={size}
+      loading="lazy"
+      decoding="async"
+      className={`rounded-full object-cover ${className}`}
+      style={{ width: size, height: size }}
+    />
+  </picture>
+);
+
 const Testimonials: React.FC = () => {
-  const testimonials: Testimonial[] = testimonialsData;
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState(0);
+  const reduced = useReducedMotion();
+  const regionRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(regionRef, { amount: 0.4 });
 
-  // Fix slideVariants typing for framer-motion strictness
-  const slideVariants: any = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? 300 : -300,
-      opacity: 0,
-      position: 'absolute',
-    }),
-    center: {
-      zIndex: 1,
-      x: 0,
-      opacity: 1,
-      position: 'relative',
-      transition: {
-        x: { type: 'spring' as const, stiffness: 300, damping: 30 },
-        opacity: { duration: 0.3 },
-      },
-    },
-    exit: (direction: number) => ({
-      zIndex: 0,
-      x: direction < 0 ? 300 : -300,
-      opacity: 0,
-      position: 'absolute',
-    }),
+  const [index, setIndex] = useState(0);
+  /** The user's play/pause choice. Manual navigation also stops auto-advance. */
+  const [playing, setPlaying] = useState(true);
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  /** Set once the user navigates, so the live region only speaks for their own actions. */
+  const [announce, setAnnounce] = useState(false);
+
+  const autoplay = playing && !reduced && inView;
+  const held = hovered || focused;
+
+  const go = useCallback((next: number) => setIndex(((next % COUNT) + COUNT) % COUNT), []);
+
+  const select = (next: number) => {
+    setPlaying(false);
+    setAnnounce(true);
+    go(next);
   };
 
-  const paginate = (newDirection: number) => {
-    setDirection(newDirection);
-    setCurrentIndex((prevIndex) => {
-      let nextIndex = prevIndex + newDirection;
-      if (nextIndex < 0) nextIndex = testimonials.length - 1;
-      if (nextIndex >= testimonials.length) nextIndex = 0;
-      return nextIndex;
-    });
+  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    const keys: Record<string, number> = {
+      ArrowLeft: index - 1,
+      ArrowRight: index + 1,
+      Home: 0,
+      End: COUNT - 1,
+    };
+    if (!(e.key in keys)) return;
+    e.preventDefault();
+    select(keys[e.key]);
+    // Keep focus on the avatar row when navigating from it, so arrows feel like a tablist.
+    const target = e.target as HTMLElement;
+    if (target.dataset.avatar !== undefined) {
+      const next = ((keys[e.key] % COUNT) + COUNT) % COUNT;
+      regionRef.current?.querySelector<HTMLButtonElement>(`[data-avatar="${next}"]`)?.focus();
+    }
   };
 
-  const currentTestimonial = testimonials[currentIndex];
+  const handleBlur = (e: FocusEvent<HTMLDivElement>) => {
+    if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFocused(false);
+  };
+
+  const active = testimonials[index];
 
   return (
-    <section id="testimonials" className="py-20 bg-white dark:bg-slate-800 relative overflow-hidden">
-      {/* Background Decoration */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(168,85,247,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.03)_1px,transparent_1px)] bg-size-[50px_50px] dark:bg-[linear-gradient(rgba(168,85,247,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.1)_1px,transparent_1px)]" />
-      
-      {/* Floating Quote Icons */}
-      <motion.div
-        animate={{ rotate: [0, 360] }}
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-        className="absolute top-10 left-10 text-purple-400/10 dark:text-purple-400/20"
-      >
-        <Quote size={100} />
-      </motion.div>
-      <motion.div
-        animate={{ rotate: [360, 0] }}
-        transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-        className="absolute bottom-10 right-10 text-pink-500/10 dark:text-pink-500/20"
-      >
-        <Quote size={120} />
-      </motion.div>
+    <Section id="testimonials" aria-labelledby="testimonials-heading">
+      <Reveal>
+        <SectionHeading
+          id="testimonials-heading"
+          index={4}
+          label="Testimonials"
+          title="In their words"
+          lead="Recommendations from engineers, lecturers and teammates I have worked alongside."
+        />
+      </Reveal>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-6 relative z-20"
+      <Reveal delay={0.05}>
+        <div
+          ref={regionRef}
+          role="region"
+          aria-roledescription="carousel"
+          aria-label="Recommendations"
+          onKeyDown={handleKeyDown}
+          onPointerEnter={(e) => e.pointerType !== 'touch' && setHovered(true)}
+          onPointerLeave={() => setHovered(false)}
+          onFocus={() => setFocused(true)}
+          onBlur={handleBlur}
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span className="bg-linear-to-r from-purple-400 via-pink-500 to-cyan-300 bg-clip-text text-transparent">
-              Client Testimonials
+          {/* Featured quote */}
+          <div className="relative overflow-hidden rounded-2xl border border-line bg-surface px-6 pt-14 pb-10 sm:px-12 sm:pt-20 sm:pb-12 lg:px-16">
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute top-0 left-4 font-display text-[9rem] leading-[0.9] text-accent/15 select-none sm:left-8 sm:text-[13rem]"
+            >
+              &ldquo;
             </span>
-          </h2>
-          <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto mb-8 sm:mb-0 pb-4 sm:pb-0">
-            What people say about working with me
-          </p>
-        </motion.div>
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-x-12 top-0 h-px bg-linear-to-r from-transparent via-accent/50 to-transparent"
+            />
 
-        {/* Testimonial Carousel */}
-        <div className="relative max-w-4xl mx-auto">
-          <div className="relative flex flex-col items-center mt-2 sm:mt-0">
-            {/* Increased extra margin for mobile to prevent overlap */}
-            <div className="h-1 block sm:hidden" />
-            <AnimatePresence initial={false} custom={direction}>
-              <motion.div
-                key={currentIndex}
-                custom={direction}
-                variants={slideVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{
-                  x: { type: "spring", stiffness: 300, damping: 30 },
-                  opacity: { duration: 0.3 }
-                }}
-                className="bg-slate-50 dark:bg-slate-900 rounded-3xl p-8 md:p-12 shadow-xl w-full z-20"
-                drag="x"
-                dragConstraints={{ left: 0, right: 0 }}
-                dragElastic={0.8}
-                onDragEnd={(_, { offset, velocity }) => {
-                  const swipe = Math.abs(offset.x) * velocity.x;
-                  if (swipe < -1000) {
-                    paginate(1);
-                  } else if (swipe > 1000) {
-                    paginate(-1);
-                  }
-                }}
-              >
-              {/* Quote Icon */}
-              <div className="flex justify-center mb-6">
-                <div className="p-4 rounded-full bg-linear-to-br from-purple-400/20 to-pink-500/20">
-                  <Quote size={32} className="text-purple-400" />
-                </div>
-              </div>
-
-              {/* Rating */}
-              <div className="flex justify-center gap-1 mb-6">
-                {[...Array(currentTestimonial.rating)].map((_, i) => (
-                  <Star key={i} size={20} className="fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-
-              {/* Content */}
-              <p className="text-slate-700 dark:text-slate-300 text-lg md:text-xl text-center mb-8 leading-relaxed">
-                "{currentTestimonial.content}"
-              </p>
-
-              {/* Author */}
-              <div className="flex flex-col items-center">
-                <motion.img
-                  whileHover={{ scale: 1.1 }}
-                  src={currentTestimonial.image}
-                  alt={currentTestimonial.name}
-                  className="w-16 h-16 rounded-full mb-4 border-4 border-purple-400/30"
-                />
-                <h4 className="text-slate-900 dark:text-slate-100 font-bold text-lg text-center wrap-break-word">
-                  {currentTestimonial.name}
-                </h4>
-                <p className="text-purple-400 font-medium text-center wrap-break-word whitespace-pre-line">
-                  {currentTestimonial.role}
-                </p>
-                <p className="text-slate-600 dark:text-slate-400 text-sm mb-3">
-                  {currentTestimonial.company}
-                </p>
-                <motion.a
-                  href={currentTestimonial.linkedIn}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-2 rounded-lg bg-linear-to-r from-purple-400 to-pink-500 hover:shadow-glow text-white transition-all duration-300"
-                  aria-label={`View ${currentTestimonial.name}'s LinkedIn profile`}
-                >
-                  <Linkedin size={20} className="text-white" />
-                </motion.a>
-              </div>
-            </motion.div>
-          </AnimatePresence>
+            {/* All slides share one grid cell so the panel keeps the height of the longest quote. */}
+            <div className="relative grid">
+              {testimonials.map((t, i) => {
+                const isActive = i === index;
+                return (
+                  <motion.figure
+                    key={t.id}
+                    role="group"
+                    aria-roledescription="slide"
+                    aria-label={`${i + 1} of ${COUNT}`}
+                    aria-hidden={!isActive}
+                    inert={!isActive}
+                    className="col-start-1 row-start-1 flex flex-col"
+                    initial={false}
+                    animate={
+                      isActive
+                        ? { opacity: 1, y: 0, visibility: 'visible' }
+                        : { opacity: 0, y: reduced ? 0 : 8, transitionEnd: { visibility: 'hidden' } }
+                    }
+                    transition={{ duration: reduced ? 0.15 : 0.5, ease: EASE_OUT }}
+                  >
+                    <blockquote className="max-w-4xl">
+                      <p className="font-display text-[1.375rem] leading-[1.35] tracking-[-0.02em] text-fg text-pretty sm:text-3xl lg:text-[2.125rem]">
+                        {t.content}
+                      </p>
+                    </blockquote>
+                    <figcaption className="mt-auto flex items-center gap-4 pt-10">
+                      <Avatar t={t} size={48} className="border border-line" />
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium text-fg">{t.name}</p>
+                        <p className="text-sm leading-snug text-muted">
+                          {t.role}
+                          <span aria-hidden="true" className="mx-1.5">
+                            ·
+                          </span>
+                          <span className="sr-only">, </span>
+                          {t.company}
+                        </p>
+                      </div>
+                      <a
+                        href={t.linkedIn}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-line text-muted transition-colors hover:border-muted hover:text-fg"
+                        aria-label={`${t.name} on LinkedIn (opens in a new tab)`}
+                      >
+                        <FaLinkedinIn size={16} aria-hidden="true" />
+                      </a>
+                    </figcaption>
+                  </motion.figure>
+                );
+              })}
+            </div>
           </div>
 
-          {/* Navigation Buttons */}
-          <div className="flex justify-center items-center gap-4 mt-8 z-30 relative">
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => paginate(-1)}
-              className="p-3 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-purple-400 hover:text-white transition-all duration-300"
-              aria-label="Previous testimonial"
-            >
-              <ChevronLeft size={24} />
-            </motion.button>
-
-            {/* Dots Indicator */}
-            <div className="flex gap-2">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    setDirection(index > currentIndex ? 1 : -1);
-                    setCurrentIndex(index);
-                  }}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    index === currentIndex
-                      ? 'bg-purple-400 w-8'
-                      : 'bg-slate-300 dark:bg-slate-600 hover:bg-purple-400/50'
-                  }`}
-                  aria-label={`Go to testimonial ${index + 1}`}
-                />
-              ))}
+          {/* Controls */}
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-5">
+            <div role="group" aria-label="Choose a recommendation" className="flex items-center gap-3">
+              {testimonials.map((t, i) => {
+                const isActive = i === index;
+                return (
+                  <button
+                    key={t.id}
+                    type="button"
+                    data-avatar={i}
+                    onClick={() => select(i)}
+                    aria-current={isActive ? 'true' : undefined}
+                    aria-label={`Show recommendation from ${t.name}`}
+                    tabIndex={isActive ? 0 : -1}
+                    className="group relative rounded-full p-0.5"
+                  >
+                    <span
+                      className={`block rounded-full ring-offset-2 ring-offset-bg transition-[box-shadow,filter,opacity] duration-300 ${
+                        isActive
+                          ? 'ring-2 ring-accent'
+                          : 'opacity-60 ring-1 ring-line grayscale group-hover:opacity-100 group-hover:grayscale-0'
+                      }`}
+                    >
+                      <Avatar t={t} size={44} />
+                    </span>
+                    {/* Dwell-time hairline under the active avatar. Its end advances the carousel. */}
+                    {isActive && autoplay && (
+                      <span
+                        aria-hidden="true"
+                        className="absolute inset-x-2 -bottom-2.5 h-px overflow-hidden bg-line"
+                      >
+                        <span
+                          key={index}
+                          className="block h-full origin-left animate-progress bg-accent"
+                          style={{ animationPlayState: held ? 'paused' : 'running' }}
+                          onAnimationEnd={() => go(index + 1)}
+                        />
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
             </div>
 
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => paginate(1)}
-              className="p-3 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-purple-400 hover:text-white transition-all duration-300"
-              aria-label="Next testimonial"
-            >
-              <ChevronRight size={24} />
-            </motion.button>
+            <div className="flex items-center gap-2">
+              <p className="mr-2 font-mono text-xs tabular-nums text-muted">
+                <span className="text-fg">{pad(index + 1)}</span>
+                <span aria-hidden="true" className="mx-1.5">
+                  /
+                </span>
+                <span className="sr-only"> of </span>
+                {pad(COUNT)}
+              </p>
+              {!reduced && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAnnounce(false);
+                    setPlaying((p) => !p);
+                  }}
+                  aria-label={playing ? 'Pause auto-advance' : 'Resume auto-advance'}
+                  className="grid h-11 w-11 place-items-center rounded-full text-muted hover:bg-surface-2 hover:text-fg"
+                >
+                  {playing ? <Pause size={16} aria-hidden="true" /> : <Play size={16} aria-hidden="true" />}
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => select(index - 1)}
+                aria-label="Previous recommendation"
+                className="grid h-11 w-11 place-items-center rounded-full border border-line bg-surface text-fg hover:border-muted hover:bg-surface-2"
+              >
+                <ArrowLeft size={18} aria-hidden="true" />
+              </button>
+              <button
+                type="button"
+                onClick={() => select(index + 1)}
+                aria-label="Next recommendation"
+                className="grid h-11 w-11 place-items-center rounded-full border border-line bg-surface text-fg hover:border-muted hover:bg-surface-2"
+              >
+                <ArrowRight size={18} aria-hidden="true" />
+              </button>
+            </div>
           </div>
+
+          {/* Announces changes the user makes; auto-advance stays silent so it never interrupts. */}
+          <p className="sr-only" aria-live="polite" aria-atomic="true">
+            {announce && `${active.name}, ${active.role}, ${active.company}: ${active.content}`}
+          </p>
         </div>
-      </div>
-    </section>
+      </Reveal>
+    </Section>
   );
 };
 
