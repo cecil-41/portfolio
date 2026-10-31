@@ -30,7 +30,7 @@ const BackToTop: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: reduced ? 0 : 12 }}
           transition={{ duration: reduced ? 0.15 : 0.3, ease: EASE_OUT }}
-          className="fixed right-5 bottom-5 z-40 grid h-12 w-12 cursor-pointer place-items-center rounded-full border border-line bg-surface/85 text-fg shadow-lg shadow-black/10 backdrop-blur-md hover:border-muted hover:bg-surface-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:right-8 sm:bottom-8"
+          className="fixed right-[max(1.25rem,env(safe-area-inset-right))] bottom-[calc(1.25rem+env(safe-area-inset-bottom))] z-40 grid h-12 w-12 cursor-pointer place-items-center rounded-full border border-line bg-surface/85 text-fg shadow-lg shadow-black/10 backdrop-blur-md hover:border-muted hover:bg-surface-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:right-[max(2rem,env(safe-area-inset-right))] sm:bottom-[calc(2rem+env(safe-area-inset-bottom))]"
         >
           <ArrowUp size={20} aria-hidden="true" />
         </motion.button>

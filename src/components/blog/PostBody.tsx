@@ -59,14 +59,14 @@ const CodeBlock: React.FC<ComponentPropsWithoutRef<'pre'> & ExtraProps> = (props
 
   return (
     <div className="my-8 overflow-hidden rounded-xl border border-line bg-surface">
-      <div className="flex h-10 items-center justify-between border-b border-line pr-1.5 pl-4">
+      <div className="flex h-12 items-center justify-between border-b border-line pr-0.5 pl-4">
         <span className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-muted">
           {language ?? 'Code'}
         </span>
         <button
           type="button"
           onClick={copy}
-          className="inline-flex h-8 cursor-pointer items-center gap-1.5 rounded-md px-2.5 font-mono text-xs text-muted hover:bg-surface-2 hover:text-fg"
+          className="inline-flex h-11 min-w-11 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-3 font-mono text-xs text-muted hover:bg-surface-2 hover:text-fg"
         >
           {copied ? (
             <Check size={14} aria-hidden="true" className="text-accent-ink" />

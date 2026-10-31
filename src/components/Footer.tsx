@@ -11,7 +11,8 @@ const Footer: React.FC = () => {
 
   return (
     <footer className="border-t border-line">
-      <div className="mx-auto flex w-full max-w-6xl flex-col-reverse gap-6 px-5 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+      {/* Bottom padding clears the home indicator on notched phones. */}
+      <div className="mx-auto flex w-full max-w-6xl flex-col-reverse gap-6 px-5 pt-8 pb-[calc(2rem+env(safe-area-inset-bottom))] sm:flex-row sm:items-center sm:justify-between sm:px-8">
         <p className="text-sm text-muted">
           &copy; {year} {profile.name}. All rights reserved.
         </p>

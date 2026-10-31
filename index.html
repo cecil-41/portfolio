@@ -2,9 +2,12 @@
 <html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Cecil Sithole | Software Engineer</title>
-    <meta name="theme-color" content="#07090F" />
+    <!-- Browser chrome colour. The media pair covers first paint; the script below and
+         ThemeProvider then set both to the theme actually in use (dark unless chosen light). -->
+    <meta name="theme-color" content="#07090F" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#F7F8FA" media="(prefers-color-scheme: light)" />
     <script>
       // Set the theme before first paint to avoid a flash. Dark unless the user chose light.
       (function () {
@@ -12,16 +15,28 @@
         try { light = localStorage.getItem('theme') === 'light'; } catch (e) {}
         var root = document.documentElement;
         root.classList.toggle('dark', !light);
-        if (light) {
-          var meta = document.querySelector('meta[name="theme-color"]');
-          if (meta) meta.setAttribute('content', '#F7F8FA');
-        }
+        var metas = document.querySelectorAll('meta[name="theme-color"]');
+        for (var i = 0; i < metas.length; i++) metas[i].setAttribute('content', light ? '#F7F8FA' : '#07090F');
       })();
     </script>
-    <link rel="icon" type="image/png" href="/icon.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="%BASE_URL%favicon-48.png" />
+    <link rel="apple-touch-icon" href="%BASE_URL%apple-touch-icon.png" />
+    <link rel="manifest" href="%BASE_URL%manifest.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <!-- Only the weights in use. Loaded without blocking render; display=swap shows fallback text at once. -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      />
+    </noscript>
   </head>
   <body>
     <div id="root"></div>

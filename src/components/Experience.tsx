@@ -154,7 +154,7 @@ const RoleCard: React.FC<{ role: Role; index: number }> = ({ role, index }) => {
       id={roleDomId(role)}
       tabIndex={-1}
       aria-labelledby={`${roleDomId(role)}-title`}
-      className="relative scroll-mt-28 overflow-hidden rounded-2xl border border-line bg-surface p-6 focus:outline-none focus-visible:outline-2 focus-visible:outline-accent sm:p-8"
+      className="relative scroll-mt-[calc(7rem+env(safe-area-inset-top))] overflow-hidden rounded-2xl border border-line bg-surface p-5 focus:outline-none focus-visible:outline-2 focus-visible:outline-accent sm:p-8"
     >
       {current && <TopHairline />}
 
@@ -275,7 +275,7 @@ const Experience: React.FC = () => {
           <StickyPanel active={active} onJump={jumpTo} reduced={reduced} />
         </div>
 
-        <ol ref={listRef} className="relative pl-8 sm:pl-12">
+        <ol ref={listRef} className="relative pl-7 sm:pl-12">
           {/* Rail. On large screens an accent line fills it as you scroll. */}
           <span
             aria-hidden="true"
@@ -298,7 +298,7 @@ const Experience: React.FC = () => {
               <li key={role.id} data-role-index={i} className="relative pb-6 last:pb-0 sm:pb-8">
                 <span
                   aria-hidden="true"
-                  className={`absolute top-8 -left-6 h-3 w-3 -translate-x-1/2 rounded-full border transition-[background-color,border-color,box-shadow] duration-300 sm:top-9 sm:-left-8 ${
+                  className={`absolute top-8 -left-5 h-3 w-3 -translate-x-1/2 rounded-full border transition-[background-color,border-color,box-shadow] duration-300 sm:top-9 sm:-left-8 ${
                     i === 0 ? 'border-accent bg-bg' : 'border-muted/60 bg-surface-2'
                   } ${
                     lit

@@ -9,8 +9,13 @@ interface PostCoverProps {
   height: number;
   /** The post page cover is above the fold, so it loads eagerly. */
   priority?: boolean;
+  /** Rendered width hint for the srcset, e.g. "(min-width: 1024px) 620px, 100vw". */
+  sizes?: string;
   className?: string;
 }
+
+/** Candidate widths for the srcset; small enough for a 360px phone at 1x. */
+const SRCSET_WIDTHS = [480, 800, 1200, 1600];
 
 /**
  * A post's cover. Unsplash photos are resized and toned down to sit calmly on the
@@ -22,9 +27,16 @@ const PostCover: React.FC<PostCoverProps> = ({
   width,
   height,
   priority = false,
+  sizes = '100vw',
   className = '',
 }) => {
   const src = photoSrc(post.image, width, height);
+  // Same crop at each width (height follows the aspect ratio), never wider than requested.
+  const srcSet = src
+    ? SRCSET_WIDTHS.filter((w) => w <= width)
+        .map((w) => `${photoSrc(post.image, w, Math.round((w * height) / width))} ${w}w`)
+        .join(', ')
+    : undefined;
 
   return (
     <div className={`relative overflow-hidden bg-surface-2 ${className}`}>
@@ -32,6 +44,8 @@ const PostCover: React.FC<PostCoverProps> = ({
         <>
           <img
             src={src}
+            srcSet={srcSet}
+            sizes={sizes}
             alt=""
             width={width}
             height={height}

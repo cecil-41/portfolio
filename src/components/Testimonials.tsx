@@ -4,7 +4,7 @@ import { motion, useInView } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Pause, Play } from 'lucide-react';
 import { FaLinkedinIn } from 'react-icons/fa6';
 import testimonialsData from '../data/testimonials.json';
-import { EASE_OUT, Reveal, Section, SectionHeading, useReducedMotion } from './ui';
+import { EASE_OUT, Reveal, Section, SectionHeading, usePageVisible, useReducedMotion } from './ui';
 
 interface Testimonial {
   id: number;
@@ -22,8 +22,8 @@ const testimonials = testimonialsData as Testimonial[];
 const COUNT = testimonials.length;
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
-/** A 192px WebP sits next to each original JPG; the JPG stays as the fallback. */
-const thumb = (path: string) => asset(path.replace(/\.jpe?g$/i, '-192.webp'));
+/** 96px and 192px WebPs sit next to each original JPG; the JPG stays as the fallback. */
+const thumb = (path: string, px: 96 | 192) => asset(path.replace(/\.jpe?g$/i, `-${px}.webp`));
 
 const pad = (n: number) => String(n).padStart(2, '0');
 
@@ -33,7 +33,11 @@ const Avatar: React.FC<{ t: Testimonial; size: number; className?: string }> = (
   className = '',
 }) => (
   <picture>
-    <source type="image/webp" srcSet={thumb(t.image)} />
+    <source
+      type="image/webp"
+      srcSet={`${thumb(t.image, 96)} 96w, ${thumb(t.image, 192)} 192w`}
+      sizes={`${size}px`}
+    />
     <img
       src={asset(t.image)}
       alt={t.name}
@@ -60,8 +64,10 @@ const Testimonials: React.FC = () => {
   /** Set once the user navigates, so the live region only speaks for their own actions. */
   const [announce, setAnnounce] = useState(false);
 
+  const pageVisible = usePageVisible();
   const autoplay = playing && !reduced && inView;
-  const held = hovered || focused;
+  // A hidden tab holds the dwell timer where it is, rather than restarting it.
+  const held = hovered || focused || !pageVisible;
 
   const go = useCallback((next: number) => setIndex(((next % COUNT) + COUNT) % COUNT), []);
 
@@ -137,7 +143,7 @@ const Testimonials: React.FC = () => {
               {testimonials.map((t, i) => {
                 const isActive = i === index;
                 return (
-                  <motion.figure
+                  <motion.div
                     key={t.id}
                     role="group"
                     aria-roledescription="slide"
@@ -153,6 +159,9 @@ const Testimonials: React.FC = () => {
                     }
                     transition={{ duration: reduced ? 0.15 : 0.5, ease: EASE_OUT }}
                   >
+                    {/* The slide wrapper carries role="group" (not allowed on <figure>), so the
+                        figure sits inside it and keeps the quote/caption semantics. */}
+                    <figure className="flex flex-1 flex-col">
                     <blockquote className="max-w-4xl">
                       <p className="font-display text-[1.375rem] leading-[1.35] tracking-[-0.02em] text-fg text-pretty sm:text-3xl lg:text-[2.125rem]">
                         {t.content}
@@ -181,7 +190,8 @@ const Testimonials: React.FC = () => {
                         <FaLinkedinIn size={16} aria-hidden="true" />
                       </a>
                     </figcaption>
-                  </motion.figure>
+                    </figure>
+                  </motion.div>
                 );
               })}
             </div>

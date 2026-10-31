@@ -8,9 +8,10 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   // Keep the DOM (class + browser chrome colour) in sync with state.
   useEffect(() => {
     document.documentElement.classList.toggle('dark', isDark);
+    // index.html ships a light/dark media pair; the chosen theme overrides both.
     document
-      .querySelector('meta[name="theme-color"]')
-      ?.setAttribute('content', isDark ? THEME_COLOR.dark : THEME_COLOR.light);
+      .querySelectorAll('meta[name="theme-color"]')
+      .forEach((meta) => meta.setAttribute('content', isDark ? THEME_COLOR.dark : THEME_COLOR.light));
   }, [isDark]);
 
   const toggleTheme = useCallback(() => {

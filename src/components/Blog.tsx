@@ -25,7 +25,13 @@ const FeaturedPost: React.FC<{ post: Post }> = ({ post }) => (
     className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface transition-colors duration-200 hover:border-muted/60"
   >
     <div className="relative">
-      <PostCover post={post} width={1200} height={675} className="aspect-video border-b border-line" />
+      <PostCover
+        post={post}
+        width={1200}
+        height={675}
+        sizes="(min-width: 1152px) 640px, (min-width: 1024px) 56vw, (min-width: 640px) calc(100vw - 4rem), calc(100vw - 2.5rem)"
+        className="aspect-video border-b border-line"
+      />
       <span className="absolute top-4 left-4 rounded-full border border-line bg-bg/75 px-3 py-1 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-fg backdrop-blur-md">
         Latest
       </span>

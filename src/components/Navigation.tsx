@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme';
 import { EASE_OUT, useReducedMotion } from './ui';
 import profile from '../data/profile.json';
+import { scrollToElement } from '../utils/scroll';
 
 const NAV_ITEMS = [
   { name: 'Home', href: '#home' },
@@ -16,13 +17,7 @@ const NAV_ITEMS = [
   { name: 'Contact', href: '#contact' },
 ];
 
-const scrollToSelector = (href: string) => {
-  const element = document.querySelector(href);
-  if (!element) return;
-  const offset = 80;
-  const top = element.getBoundingClientRect().top + window.scrollY - offset;
-  window.scrollTo({ top, behavior: 'smooth' });
-};
+const scrollToSelector = (href: string) => scrollToElement(document.querySelector(href));
 
 const Navigation: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -73,14 +68,27 @@ const Navigation: React.FC = () => {
     };
   }, [onBlogRoute]);
 
-  // Close the mobile menu with Escape.
+  // While the mobile menu is open: Escape closes it, the page behind can't scroll, and
+  // growing to the desktop layout (where the menu is hidden) closes it too.
   useEffect(() => {
     if (!isOpen) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setIsOpen(false);
     };
+    const desktop = window.matchMedia('(min-width: 1024px)');
+    const onDesktop = () => desktop.matches && setIsOpen(false);
+
+    const root = document.documentElement;
+    const previousOverflow = root.style.overflow;
+    root.style.overflow = 'hidden';
+
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    desktop.addEventListener('change', onDesktop);
+    return () => {
+      root.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', onKey);
+      desktop.removeEventListener('change', onDesktop);
+    };
   }, [isOpen]);
 
   const handleNavClick = (href: string) => {
@@ -104,7 +112,7 @@ const Navigation: React.FC = () => {
   };
 
   const iconButton =
-    'flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-line ' +
+    'flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-line ' +
     'bg-surface/60 text-muted hover:border-muted hover:text-fg';
 
   return (
@@ -113,21 +121,25 @@ const Navigation: React.FC = () => {
       initial={reduced ? false : { y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: EASE_OUT }}
-      className="fixed top-0 z-50 w-full border-b border-line bg-bg/70 backdrop-blur-xl backdrop-saturate-150"
+      className="fixed top-0 z-50 w-full border-b border-line bg-bg/70 pt-[env(safe-area-inset-top)] backdrop-blur-xl backdrop-saturate-150"
     >
-      <div className="mx-auto max-w-7xl px-5 sm:px-8">
-        <div className="flex h-16 items-center justify-between gap-6">
+      <div className="mx-auto max-w-7xl pr-[max(1.25rem,env(safe-area-inset-right))] pl-[max(1.25rem,env(safe-area-inset-left))] sm:px-8">
+        <div className="flex h-16 items-center justify-between gap-4 sm:gap-6">
           {/* Monogram + name */}
           <button
             type="button"
             onClick={handleLogoClick}
             aria-label={`${profile.name}, back to top`}
-            className="group flex cursor-pointer items-center gap-3"
+            className="group flex min-h-11 min-w-0 cursor-pointer items-center gap-3"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-line bg-surface font-mono text-[0.8rem] font-medium tracking-tight text-fg group-hover:border-accent/60">
+            {/* Decorative monogram; hidden so the accessible name starts with the visible name. */}
+            <span
+              aria-hidden="true"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-line bg-surface font-mono text-[0.8rem] font-medium tracking-tight text-fg group-hover:border-accent/60"
+            >
               CS
             </span>
-            <span className="font-display text-lg font-semibold tracking-display text-fg">
+            <span className="truncate font-display text-lg font-semibold tracking-display text-fg">
               {profile.name}
             </span>
           </button>
@@ -163,7 +175,7 @@ const Navigation: React.FC = () => {
             })}
           </ul>
 
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <button
               type="button"
               onClick={toggleTheme}
@@ -188,43 +200,49 @@ const Navigation: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile menu: a sheet filling the screen below the bar. Links sit at the bottom,
+          within thumb reach; the page behind is scroll-locked while it's open.
+          (The nav is the containing block here because of its backdrop-filter, so the
+          sheet is absolute + explicit height rather than fixed.) */}
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
             id="mobile-menu"
             key="mobile-menu"
-            initial={reduced ? { opacity: 0 } : { opacity: 0, height: 0 }}
-            animate={reduced ? { opacity: 1 } : { opacity: 1, height: 'auto' }}
-            exit={reduced ? { opacity: 0 } : { opacity: 0, height: 0 }}
-            transition={{ duration: reduced ? 0.01 : 0.3, ease: EASE_OUT }}
-            className="overflow-hidden border-t border-line bg-bg/95 backdrop-blur-xl lg:hidden"
+            initial={reduced ? { opacity: 0 } : { opacity: 0, y: -8 }}
+            animate={reduced ? { opacity: 1 } : { opacity: 1, y: 0 }}
+            exit={reduced ? { opacity: 0 } : { opacity: 0, y: -8 }}
+            transition={{ duration: reduced ? 0.01 : 0.25, ease: EASE_OUT }}
+            className="absolute inset-x-0 top-full flex h-[calc(100dvh-4rem-env(safe-area-inset-top))] flex-col overflow-y-auto overscroll-contain border-t border-line bg-bg lg:hidden"
           >
-            <ul className="mx-auto max-w-7xl px-5 py-4 sm:px-8">
-              {NAV_ITEMS.map((item, i) => {
-                const isActive = currentSection === item.href.substring(1);
-                return (
-                  <li key={item.name}>
-                    <button
-                      type="button"
-                      onClick={() => handleNavClick(item.href)}
-                      aria-current={isActive ? 'true' : undefined}
-                      className={`flex w-full cursor-pointer items-center gap-4 border-b border-line/60 py-3.5 text-left last:border-b-0 ${
-                        isActive ? 'text-fg' : 'text-muted hover:text-fg'
-                      }`}
-                    >
-                      <span className="w-6 font-mono text-xs text-muted">
-                        {String(i + 1).padStart(2, '0')}
-                      </span>
-                      <span className="font-display text-lg tracking-display">{item.name}</span>
-                      {isActive && (
-                        <span aria-hidden="true" className="ml-auto h-1.5 w-1.5 rounded-full bg-accent" />
-                      )}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
+            <div className="mx-auto mt-auto w-full max-w-7xl pt-10 pr-[max(1.25rem,env(safe-area-inset-right))] pb-[calc(1.5rem+env(safe-area-inset-bottom))] pl-[max(1.25rem,env(safe-area-inset-left))] sm:px-8">
+              <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-muted">Navigate</p>
+              <ul className="border-t border-line/60">
+                {NAV_ITEMS.map((item, i) => {
+                  const isActive = currentSection === item.href.substring(1);
+                  return (
+                    <li key={item.name}>
+                      <button
+                        type="button"
+                        onClick={() => handleNavClick(item.href)}
+                        aria-current={isActive ? 'true' : undefined}
+                        className={`flex min-h-14 w-full cursor-pointer items-center gap-4 border-b border-line/60 py-3 text-left ${
+                          isActive ? 'text-fg' : 'text-muted hover:text-fg'
+                        }`}
+                      >
+                        <span className="w-6 font-mono text-xs text-muted">
+                          {String(i + 1).padStart(2, '0')}
+                        </span>
+                        <span className="font-display text-2xl tracking-display">{item.name}</span>
+                        {isActive && (
+                          <span aria-hidden="true" className="ml-auto h-1.5 w-1.5 rounded-full bg-accent" />
+                        )}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

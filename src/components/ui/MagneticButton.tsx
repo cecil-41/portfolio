@@ -18,6 +18,8 @@ interface BaseProps {
   /** How strongly the button follows the pointer (0 to 1). */
   strength?: number;
   className?: string;
+  /** Classes for the outer wrapper, e.g. `w-full sm:w-auto` for a full-width mobile button. */
+  wrapperClassName?: string;
 }
 
 type AsLink = BaseProps &
@@ -59,6 +61,7 @@ const MagneticButton: React.FC<MagneticButtonProps> = (props) => {
     size = 'md',
     strength = 0.3,
     className = '',
+    wrapperClassName = '',
     ...rest
   } = props;
 
@@ -99,7 +102,7 @@ const MagneticButton: React.FC<MagneticButtonProps> = (props) => {
   return (
     <motion.span
       ref={ref}
-      className="inline-flex"
+      className={`inline-flex ${wrapperClassName}`}
       style={enabled ? { x, y } : undefined}
       onPointerMove={handleMove}
       onPointerLeave={reset}

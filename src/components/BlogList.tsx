@@ -40,7 +40,7 @@ const BlogList: React.FC = () => {
   const filterOptions = [{ name: ALL, count: posts.length }, ...categories];
 
   return (
-    <main className="min-h-screen pt-16">
+    <main className="min-h-svh pt-16">
       <SEO
         title="Writing | Cecil Sithole"
         description="Articles by Cecil Sithole, a software engineer, on software engineering, data, cloud and AI."
@@ -50,7 +50,7 @@ const BlogList: React.FC = () => {
         <Reveal>
           <Link
             to="/"
-            className="mb-10 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-muted hover:text-fg"
+            className="mb-7 -mt-3 inline-flex min-h-11 items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-muted hover:text-fg"
           >
             <ArrowLeft size={14} aria-hidden="true" />
             Home
@@ -85,7 +85,7 @@ const BlogList: React.FC = () => {
                 placeholder="Search articles"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="h-11 w-full rounded-full border border-line bg-surface pr-4 pl-11 text-sm text-fg placeholder:text-muted transition-colors hover:border-muted/60 focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent [&::-webkit-search-cancel-button]:hidden"
+                className="h-12 w-full rounded-full border border-line bg-surface pr-4 pl-11 text-base text-fg placeholder:text-muted transition-colors hover:border-muted/60 focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent [&::-webkit-search-cancel-button]:hidden"
               />
             </div>
 
@@ -98,7 +98,7 @@ const BlogList: React.FC = () => {
                     type="button"
                     aria-pressed={active}
                     onClick={() => setSelectedCategory(name)}
-                    className={`inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border px-3.5 font-mono text-[0.7rem] uppercase tracking-[0.14em] ${
+                    className={`inline-flex h-11 cursor-pointer items-center gap-2 rounded-full border px-4 font-mono text-[0.7rem] uppercase tracking-[0.14em] ${
                       active
                         ? 'border-accent/60 bg-accent/10 text-fg'
                         : 'border-line bg-surface text-muted hover:border-muted/60 hover:text-fg'
@@ -113,7 +113,7 @@ const BlogList: React.FC = () => {
           </div>
         </Reveal>
 
-        <div className="mt-4 flex min-h-8 items-center justify-between gap-4">
+        <div className="mt-4 flex min-h-11 items-center justify-between gap-4">
           <p aria-live="polite" className="font-mono text-xs uppercase tracking-[0.14em] text-muted">
             {filtering
               ? `${filteredPosts.length} of ${posts.length} ${posts.length === 1 ? 'article' : 'articles'}`
@@ -123,7 +123,7 @@ const BlogList: React.FC = () => {
             <button
               type="button"
               onClick={clearFilters}
-              className="inline-flex h-8 cursor-pointer items-center gap-1.5 rounded-full px-3 font-mono text-xs uppercase tracking-[0.14em] text-muted hover:bg-surface-2 hover:text-fg"
+              className="inline-flex h-11 cursor-pointer items-center gap-1.5 rounded-full px-3 font-mono text-xs uppercase tracking-[0.14em] text-muted hover:bg-surface-2 hover:text-fg"
             >
               <X size={13} aria-hidden="true" />
               Clear
@@ -190,7 +190,7 @@ const BlogList: React.FC = () => {
             <button
               type="button"
               onClick={clearFilters}
-              className="mt-6 inline-flex h-10 cursor-pointer items-center rounded-full border border-line bg-surface px-4 text-sm text-fg hover:border-muted hover:bg-surface-2"
+              className="mt-6 inline-flex h-11 cursor-pointer items-center rounded-full border border-line bg-surface px-4 text-sm text-fg hover:border-muted hover:bg-surface-2"
             >
               Clear filters
             </button>

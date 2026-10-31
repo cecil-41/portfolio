@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import type { ComponentType } from 'react';
 import { Bot, Cable, Database, FileCode2, GraduationCap, Layers, LayoutDashboard, Workflow } from 'lucide-react';
 import {
@@ -23,7 +23,7 @@ import {
 import { TbBrandCSharp, TbBrandReactNative } from 'react-icons/tb';
 import { VscAzure } from 'react-icons/vsc';
 import skillsData from '../data/skills.json';
-import { Reveal, Section, SectionHeading, TiltCard } from './ui';
+import { Reveal, Section, SectionHeading, TiltCard, usePlayWhileVisible } from './ui';
 
 interface Skill {
   name: string;
@@ -117,14 +117,18 @@ const stageOf = (id: string) => {
  * echoing the hero pipeline. The pulse is hidden under reduced motion; the rail stays.
  */
 const FlowRail: React.FC = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  // The pulse loops forever; only let it run while the rail is on screen and the tab is visible.
+  const playing = usePlayWhileVisible(ref);
   const stops = FLOW_IDS.map((id) => categories.find((c) => c.id === id)).filter(
     (c): c is SkillCategory => Boolean(c),
   );
 
   return (
     <div
+      ref={ref}
       aria-hidden="true"
-      className="mb-6 flex items-center gap-3 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted"
+      className="mb-6 flex items-center gap-2 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted sm:gap-3"
     >
       {stops.map((stop, i) => (
         <React.Fragment key={stop.id}>
@@ -134,10 +138,13 @@ const FlowRail: React.FC = () => {
             <span className="sm:hidden">{stop.title.split(' ')[0]}</span>
           </span>
           {i < stops.length - 1 && (
-            <span className="relative h-px min-w-6 flex-1 overflow-hidden bg-line">
+            <span className="relative h-px min-w-4 flex-1 overflow-hidden bg-line">
               <span
                 className="absolute inset-y-0 left-0 w-1/4 bg-linear-to-r from-transparent via-accent to-transparent motion-safe:animate-flow motion-reduce:hidden"
-                style={{ animationDelay: `${i * 1.6}s` }}
+                style={{
+                  animationDelay: `${i * 1.6}s`,
+                  animationPlayState: playing ? 'running' : 'paused',
+                }}
               />
             </span>
           )}

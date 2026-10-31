@@ -12,7 +12,8 @@ import type { Post } from './blog/posts';
 import { copyText } from '../utils/clipboard';
 import profile from '../data/profile.json';
 
-const PORTRAIT_SRC = `${import.meta.env.BASE_URL}images/cecil.webp`;
+/** Small 160x200 crop; shown at 40px, so this covers up to 4x screens. */
+const AVATAR_SRC = `${import.meta.env.BASE_URL}images/cecil-portrait-160.webp`;
 
 const hostOf = (url: string) => {
   try {
@@ -99,7 +100,7 @@ const BlogPost: React.FC = () => {
 
   if (!blog) {
     return (
-      <main className="grid min-h-screen place-items-center px-5 pt-16">
+      <main className="grid min-h-svh place-items-center px-5 pt-16">
         <div className="max-w-md text-center">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent-ink">404</p>
           <h1 className="mt-4 font-display text-4xl font-semibold tracking-display text-fg">
@@ -126,7 +127,7 @@ const BlogPost: React.FC = () => {
   });
 
   return (
-    <main className="min-h-screen pt-16">
+    <main className="min-h-svh pt-16">
       <SEO
         title={`${blog.title} | Cecil Sithole`}
         description={blog.excerpt}
@@ -145,7 +146,7 @@ const BlogPost: React.FC = () => {
         >
           <Link
             to="/blog"
-            className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-muted hover:text-fg"
+            className="-my-3 inline-flex min-h-11 items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-muted hover:text-fg"
           >
             <ArrowLeft size={14} aria-hidden="true" />
             All writing
@@ -164,10 +165,10 @@ const BlogPost: React.FC = () => {
           <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-y border-line py-4">
             <div className="flex items-center gap-3">
               <img
-                src={PORTRAIT_SRC}
+                src={AVATAR_SRC}
                 alt=""
-                width={40}
-                height={40}
+                width={160}
+                height={200}
                 decoding="async"
                 className="h-10 w-10 rounded-full border border-line object-cover object-[50%_18%]"
               />
@@ -181,7 +182,7 @@ const BlogPost: React.FC = () => {
             <button
               type="button"
               onClick={shareBlog}
-              className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-full border border-line bg-surface px-4 text-sm text-fg hover:border-muted hover:bg-surface-2"
+              className="inline-flex h-11 cursor-pointer items-center gap-2 rounded-full border border-line bg-surface px-4 text-sm text-fg hover:border-muted hover:bg-surface-2"
             >
               {shareSuccess ? (
                 <Check size={16} aria-hidden="true" className="text-accent-ink" />
@@ -200,6 +201,7 @@ const BlogPost: React.FC = () => {
             width={1600}
             height={800}
             priority
+            sizes="(min-width: 1024px) 960px, (min-width: 640px) calc(100vw - 4rem), calc(100vw - 2.5rem)"
             className="aspect-[2/1] rounded-2xl border border-line"
           />
         </motion.figure>
@@ -270,7 +272,7 @@ const BlogPost: React.FC = () => {
           <div className="mt-10 text-center">
             <Link
               to="/blog"
-              className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-muted hover:text-fg"
+              className="inline-flex min-h-11 items-center gap-2 px-3 font-mono text-xs uppercase tracking-[0.16em] text-muted hover:text-fg"
             >
               All writing
               <ArrowRight size={14} aria-hidden="true" />

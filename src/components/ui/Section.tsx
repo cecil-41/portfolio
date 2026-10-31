@@ -28,7 +28,7 @@ const Section: React.FC<SectionProps> = ({
   width = 'default',
   ...rest
 }) => (
-  <section id={id} className={`relative scroll-mt-20 py-24 md:py-32 ${className}`} {...rest}>
+  <section id={id} className={`relative scroll-mt-[calc(5rem+env(safe-area-inset-top))] py-20 md:py-32 ${className}`} {...rest}>
     <div className={`mx-auto w-full ${widths[width]} px-5 sm:px-8 ${containerClassName}`}>
       {children}
     </div>
