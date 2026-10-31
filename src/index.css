@@ -1,245 +1,288 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 @variant dark (&:where(.dark, .dark *));
 
+/*
+ * Design tokens: "Engineered Depth".
+ * Dark values are the default. Light overrides live in `html:not(.dark)` below.
+ * Utilities read these through CSS variables, so `bg-surface`, `text-accent`,
+ * `border-line`, `text-accent/60` etc. switch theme automatically.
+ */
 @theme {
-  --color-white: #ffffff;
+  /* Retired hues: unregister them so they can't creep back in. */
+  --color-pink-*: initial;
+  --color-fuchsia-*: initial;
+  --color-rose-*: initial;
+  --color-purple-*: initial;
+  --color-violet-*: initial;
+  --color-cyan-*: initial;
 
-  /* ── Slate ─────────────────────────────────── */
-  --color-slate-50:  #f8fafc;
-  --color-slate-100: #f1f5f9;
-  --color-slate-200: #e2e8f0;
-  --color-slate-300: #cbd5e1;
-  --color-slate-400: #94a3b8;
-  --color-slate-500: #64748b;
-  --color-slate-600: #475569;
-  --color-slate-700: #334155;
-  --color-slate-800: #1e293b;
-  --color-slate-900: #0f172a;
-  --color-slate-950: #020617;
+  /* Surfaces */
+  --color-bg: #07090f;
+  --color-surface: #0e121b;
+  --color-surface-2: #151a26;
+  --color-line: #1f2635;
 
-  /* ── Violet / Purple ───────────────────────── */
-  --color-purple-50:  #f5f3ff;
-  --color-purple-100: #ede9fe;
-  --color-purple-200: #ddd6fe;
-  --color-purple-300: #c4b5fd;
-  --color-purple-400: #a78bfa;
-  --color-purple-500: #8b5cf6;
-  --color-purple-600: #7c3aed;
-  --color-purple-700: #6d28d9;
-  --color-purple-800: #5b21b6;
-  --color-purple-900: #4c1d95;
+  /* Text */
+  --color-fg: #e8ecf2;
+  --color-muted: #8a93a6;
 
-  /* ── Rose / Pink ───────────────────────────── */
-  --color-pink-50:  #fff1f2;
-  --color-pink-100: #ffe4e6;
-  --color-pink-200: #fecdd3;
-  --color-pink-300: #fda4af;
-  --color-pink-400: #fb7185;
-  --color-pink-500: #f43f5e;
-  --color-pink-600: #e11d48;
-  --color-pink-700: #be123c;
-  --color-pink-800: #9f1239;
-  --color-pink-900: #881337;
+  /* Accents */
+  --color-accent: #2dd4bf;
+  --color-accent-2: #5b8cff;
+  --color-warm: #f5b544;
 
-  /* ── Cyan ──────────────────────────────────── */
-  --color-cyan-50:  #ecfeff;
-  --color-cyan-100: #cffafe;
-  --color-cyan-200: #a5f3fc;
-  --color-cyan-300: #67e8f9;
-  --color-cyan-400: #22d3ee;
-  --color-cyan-500: #06b6d4;
-  --color-cyan-600: #0891b2;
-  --color-cyan-700: #0e7490;
-  --color-cyan-800: #155e75;
-  --color-cyan-900: #164e63;
+  /* Text-safe accent variants for small text (eyebrows, links, tags).
+     In dark they equal the accent; in light they are darkened to pass 4.5:1. */
+  --color-accent-ink: #2dd4bf;
+  --color-warm-ink: #f5b544;
 
-  /* ── Deep dark backgrounds ─────────────────── */
-  --color-deep-950: #030309;
-  --color-deep-900: #07071a;
-  --color-deep-800: #0d0d23;
-  --color-deep-700: #14142e;
-  --color-deep-600: #1c1c3d;
+  /* Ink used on accent fills (primary buttons). Dark in both themes. */
+  --color-on-accent: #07090f;
 
-  /* ── Fonts ─────────────────────────────────── */
-  --font-sans:    'Inter', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Plus Jakarta Sans', 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --font-mono:    ui-monospace, 'Cascadia Code', 'Fira Code', monospace;
+  /* Type */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-  /* ── Shadows ───────────────────────────────── */
-  --shadow-glow:       0 0 24px rgba(139, 92, 246, 0.55), 0 4px 16px rgba(139, 92, 246, 0.3);
-  --shadow-glow-pink:  0 0 24px rgba(244, 63, 94, 0.55),  0 4px 16px rgba(244, 63, 94, 0.3);
-  --shadow-glow-cyan:  0 0 24px rgba(34, 211, 238, 0.55), 0 4px 16px rgba(34, 211, 238, 0.3);
-  --shadow-card:       0 2px 8px rgba(0, 0, 0, 0.07), 0 1px 3px rgba(0, 0, 0, 0.05);
-  --shadow-card-hover: 0 8px 32px rgba(139, 92, 246, 0.14), 0 4px 12px rgba(0, 0, 0, 0.1);
+  --tracking-display: -0.03em;
+
+  /* Slow marquee for the hero focus strip. Disabled under reduced motion in the component. */
+  --animate-marquee: marquee 50s linear infinite;
+  @keyframes marquee {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  /* A hairline that fills over one testimonial's dwell time. Its animationend drives
+     auto-advance, so pausing the animation (hover, focus) pauses the carousel too. */
+  --animate-progress: progress 9s linear forwards;
+  @keyframes progress {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  /* A pulse travelling along a hairline (Skills flow rail). Disabled under reduced motion. */
+  --animate-flow: flow 3.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  @keyframes flow {
+    from {
+      transform: translate3d(-100%, 0, 0);
+    }
+    to {
+      transform: translate3d(400%, 0, 0);
+    }
+  }
 }
 
-/* ================================================ */
-/* Base styles                                       */
-/* ================================================ */
+@layer base {
+  :root {
+    color-scheme: dark;
+    /* Specular highlight used by TiltCard */
+    --specular: rgb(255 255 255 / 0.07);
 
-@media (prefers-color-scheme: dark) {
-  :root { color-scheme: dark; }
+    /* Syntax colours for code blocks (dark). Each passes 4.5:1 on --color-surface. */
+    --hl-keyword: #7aa2ff;
+    --hl-string: #2dd4bf;
+    --hl-number: #f5b544;
+    --hl-comment: #8a93a6;
+    --hl-title: #e8ecf2;
+    --hl-attr: #9fd8ff;
+    --hl-meta: #b4bfd3;
+  }
+
+  html:not(.dark) {
+    color-scheme: light;
+    --color-bg: #f7f8fa;
+    --color-surface: #ffffff;
+    --color-surface-2: #f0f2f5;
+    --color-line: #e3e6eb;
+    --color-fg: #0b0f17;
+    --color-muted: #5b6475;
+    --color-accent: #0f9f8e;
+    --color-accent-2: #2f5bea;
+    --color-warm: #c98a12;
+    --color-accent-ink: #0b7a6d;
+    --color-warm-ink: #8c5e06;
+    --specular: rgb(15 159 142 / 0.08);
+
+    /* Syntax colours (light). Each passes 4.5:1 on white. */
+    --hl-keyword: #2f5bea;
+    --hl-string: #0b7a6d;
+    --hl-number: #8c5e06;
+    --hl-comment: #5b6475;
+    --hl-title: #0b0f17;
+    --hl-attr: #1d5fa8;
+    --hl-meta: #4a5468;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    @apply bg-bg font-sans text-fg antialiased transition-colors duration-300;
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+  }
+
+  ::selection {
+    @apply bg-accent/25 text-fg;
+  }
+
+  a {
+    @apply text-accent-ink transition-colors duration-200 hover:text-fg;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
+  }
+
+  button {
+    @apply transition-all duration-200;
+  }
 }
 
-* { @apply antialiased; }
-
-html {
-  scroll-behavior: smooth;
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 0.5rem;
 }
 
-html.dark {
-  color-scheme: dark;
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
 }
-
-body {
-  font-family: var(--font-sans);
-  @apply bg-white dark:bg-deep-950 text-slate-900 dark:text-slate-50 transition-colors duration-300;
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-/* ── Scrollbar ──────────────────────────────────── */
-::-webkit-scrollbar { @apply w-1.5; }
-
-::-webkit-scrollbar-track { background: transparent; }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #8b5cf6, #f43f5e);
-  @apply rounded-full;
+  background: var(--color-line);
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #7c3aed, #e11d48);
+  background: var(--color-muted);
 }
 
-/* ── Text selection ─────────────────────────────── */
-::selection {
-  @apply bg-purple-500/25 text-inherit;
+html {
+  scrollbar-color: var(--color-line) var(--color-bg);
 }
 
-/* ── Links ──────────────────────────────────────── */
-a {
-  @apply transition-colors duration-200;
-}
-
-/* ── Buttons ────────────────────────────────────── */
-button {
-  @apply transition-all duration-200;
-}
-
-/* ================================================ */
-/* Component utilities                               */
-/* ================================================ */
-
-@layer components {
-
-  /* Glass card */
-  .glass {
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.45);
-  }
-
-  .dark .glass,
-  :where(.dark, .dark *) .glass {
-    background: rgba(13, 13, 35, 0.65);
-    border: 1px solid rgba(167, 139, 250, 0.18);
-  }
-
-  /* Card hover — soft border + glow lift */
-  .card-glow {
-    @apply rounded-xl bg-white dark:bg-deep-800
-           border border-slate-200/70 dark:border-purple-900/30
-           transition-all duration-300;
-  }
-
-  .card-glow:hover {
-    @apply border-purple-400/40 dark:border-purple-500/40;
-    box-shadow: 0 8px 32px rgba(139, 92, 246, 0.1), 0 4px 12px rgba(0, 0, 0, 0.08);
-  }
-
-  :where(.dark, .dark *) .card-glow:hover {
-    box-shadow: 0 8px 40px rgba(139, 92, 246, 0.18), 0 0 80px rgba(139, 92, 246, 0.05);
-  }
-
-  /* Section backgrounds */
-  .section-dark   { @apply bg-deep-950; }
-  .section-offset { @apply bg-slate-50 dark:bg-deep-900; }
-  .section-mid    { @apply bg-white dark:bg-deep-800; }
-
-  /* Tag / badge pill */
-  .tag {
-    @apply px-3 py-1 rounded-lg text-sm font-medium
-           bg-purple-500/10 text-purple-600 dark:text-purple-300
-           border border-purple-500/20 dark:border-purple-400/25
-           transition-colors duration-200;
-  }
-
-  .tag-pink {
-    @apply px-3 py-1 rounded-lg text-sm font-medium
-           bg-pink-500/10 text-pink-600 dark:text-pink-300
-           border border-pink-500/20 dark:border-pink-400/25;
-  }
-
-  /* Dot grid decoration */
-  .dot-grid {
-    background-image: radial-gradient(circle, rgba(139, 92, 246, 0.1) 1px, transparent 1px);
-    background-size: 28px 28px;
-  }
-
-  :where(.dark, .dark *) .dot-grid {
-    background-image: radial-gradient(circle, rgba(139, 92, 246, 0.18) 1px, transparent 1px);
-  }
-
-  /* Line grid decoration */
-  .line-grid {
-    background-image:
-      linear-gradient(rgba(139, 92, 246, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(139, 92, 246, 0.05) 1px, transparent 1px);
-    background-size: 48px 48px;
-  }
-
-  :where(.dark, .dark *) .line-grid {
-    background-image:
-      linear-gradient(rgba(139, 92, 246, 0.12) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(139, 92, 246, 0.12) 1px, transparent 1px);
-  }
-
-  /* Gradient border ring (pseudo-element trick via outline) */
-  .ring-gradient {
-    @apply outline outline-2 outline-offset-2 outline-purple-400/50;
-  }
-}
-
-/* ================================================ */
-/* Keyframe animations                               */
-/* ================================================ */
-
-@keyframes gradientMove {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
+/* Animations */
 @keyframes shimmer {
-  0%   { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-14px); }
+.animate-shimmer {
+  animation: shimmer 2s infinite linear;
 }
 
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 12px rgba(139, 92, 246, 0.3); }
-  50%       { box-shadow: 0 0 28px rgba(139, 92, 246, 0.7), 0 0 60px rgba(139, 92, 246, 0.2); }
+/*
+ * Blog post body (rendered markdown). Element styles live in PostBody.tsx;
+ * inline code and syntax colours live here because they depend on DOM context.
+ */
+.post-body :not(pre) > code {
+  border: 1px solid var(--color-line);
+  border-radius: 0.375rem;
+  background: var(--color-surface-2);
+  padding: 0.1em 0.4em;
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  color: var(--color-fg);
 }
 
-.animate-shimmer   { animation: shimmer 2s infinite linear; }
-.animate-float     { animation: float 4s ease-in-out infinite; }
-.animate-pulse-glow { animation: pulse-glow 2.5s ease-in-out infinite; }
+.post-body pre code {
+  font-family: var(--font-mono);
+  color: var(--color-fg);
+}
+
+/* highlight.js theme built on the design tokens, so it follows the theme switch. */
+.hljs {
+  background: transparent;
+  color: var(--color-fg);
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-type,
+.hljs-doctag {
+  color: var(--hl-keyword);
+}
+
+.hljs-string,
+.hljs-regexp,
+.hljs-symbol,
+.hljs-template-tag,
+.hljs-template-variable,
+.hljs-addition {
+  color: var(--hl-string);
+}
+
+.hljs-number,
+.hljs-bullet,
+.hljs-link {
+  color: var(--hl-number);
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: var(--hl-comment);
+  font-style: italic;
+}
+
+.hljs-title,
+.hljs-title.function_,
+.hljs-title.class_,
+.hljs-section,
+.hljs-name {
+  color: var(--hl-title);
+  font-weight: 600;
+}
+
+.hljs-attr,
+.hljs-attribute,
+.hljs-variable,
+.hljs-params,
+.hljs-property,
+.hljs-selector-class,
+.hljs-selector-id {
+  color: var(--hl-attr);
+}
+
+.hljs-built_in,
+.hljs-meta,
+.hljs-meta .hljs-keyword,
+.hljs-subst,
+.hljs-punctuation,
+.hljs-operator {
+  color: var(--hl-meta);
+}
+
+.hljs-deletion {
+  color: var(--hl-number);
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: 600;
+}

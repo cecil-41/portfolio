@@ -36,16 +36,17 @@
     "issuer": "University of Johannesburg",
     "date": "2025 - Present",
     "icon": "graduation-cap",
-    "description": "Master of Commerce in Information Technology (In Progress)"
+    "description": "Master of Commerce in Information Technology (In Progress)",
+    "research": "The Impact of Artificial Intelligence on DevOps Practices in South African Organisations"
   },
-   {
+  {
     "id": 7,
     "type": "education",
     "title": "Higher Certificate in Management Practice",
     "issuer": "Henley Business School",
-    "date": "2025 - Present",
+    "date": "2025",
     "icon": "graduation-cap",
-    "description": "Higher Certificate in Management Practice (In Progress)"
+    "description": "Higher Certificate in Management Practice"
   },
   {
     "id": 5,
@@ -54,7 +55,8 @@
     "issuer": "University of Johannesburg",
     "date": "2023",
     "icon": "graduation-cap",
-    "description": "Bachelor of Commerce Honours in Information Systems"
+    "description": "Bachelor of Commerce Honours in Information Systems",
+    "distinction": "cum laude"
   },
   {
     "id": 6,
@@ -63,9 +65,9 @@
     "issuer": "University of Johannesburg",
     "date": "2020 - 2022",
     "icon": "graduation-cap",
-    "description": "Bachelor of Commerce in Information Systems"
+    "description": "Bachelor of Commerce in Information Systems",
+    "distinction": "cum laude"
   },
- 
   {
     "id": 8,
     "type": "achievement",

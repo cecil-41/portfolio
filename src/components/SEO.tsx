@@ -12,7 +12,7 @@ interface SEOProps {
 
 const SEO: React.FC<SEOProps> = ({
   title = "Cecil's Portfolio - Software Engineer & Full Stack Developer",
-  description = "Portfolio of Cecil, a skilled Software Engineer specializing in AI integration, DevOps practices, and cloud architecture.",
+  description = "Cecil Sithole, software engineer building full-stack applications, real-time data platforms, cloud systems and enterprise integrations with Python, React, Angular, .NET, Azure and Databricks, and researching the impact of AI on DevOps practices.",
   image = "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&h=630&fit=crop",
   url,
   type = "website",

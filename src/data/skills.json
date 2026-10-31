@@ -1,46 +1,64 @@
 [
   {
-    "title": "Frontend",
-    "icon": "Palette",
-    "color": "from-pink-500 to-purple-400",
+    "id": "software",
+    "title": "Software Engineering",
+    "summary": "Full-stack web and mobile applications and APIs, from typed front ends to backend services, with Python at the core.",
+    "featured": true,
     "skills": [
-      { "name": "React/Next.js", "level": 95, "years": 6 },
-      { "name": "TypeScript", "level": 90, "years": 4 },
-      { "name": "Tailwind CSS", "level": 95, "years": 3 },
-      { "name": "Vue.js", "level": 85, "years": 3 }
+      { "name": "Python", "icon": "python", "years": 6 },
+      { "name": "React", "icon": "react", "years": 6 },
+      { "name": "Angular", "icon": "angular" },
+      { "name": "React Native", "icon": "reactnative" },
+      { "name": "TypeScript", "icon": "typescript", "years": 4 },
+      { "name": "FastAPI", "icon": "fastapi" },
+      { "name": "C# / .NET", "icon": "dotnet" },
+      { "name": "Node.js", "icon": "node", "years": 5 },
+      { "name": "Java", "icon": "java", "years": 3 }
     ]
   },
   {
-    "title": "Backend",
-    "icon": "Code2",
-    "color": "from-purple-400 to-cyan-300",
+    "id": "data",
+    "title": "Data Engineering",
+    "summary": "Real-time streaming pipelines tuned for low latency, from Kafka ingestion to curated Delta tables and insight dashboards.",
     "skills": [
-      { "name": "Node.js/Express", "level": 92, "years": 5 },
-      { "name": "Python/Django", "level": 88, "years": 4 },
-      { "name": "Java/Spring", "level": 85, "years": 3 },
-      { "name": "GraphQL", "level": 90, "years": 3 }
+      { "name": "Databricks", "icon": "databricks" },
+      { "name": "Apache Spark / PySpark", "icon": "spark" },
+      { "name": "Apache Kafka", "icon": "kafka" },
+      { "name": "Delta Lake", "icon": "delta" },
+      { "name": "Spark Declarative Pipelines", "icon": "pipeline" },
+      { "name": "SQL", "icon": "sql", "years": 3 },
+      { "name": "Insight Dashboards", "icon": "dashboard" }
     ]
   },
   {
-    "title": "Database",
-    "icon": "Database",
-    "color": "from-cyan-300 to-purple-400",
+    "id": "ai",
+    "title": "AI Engineering & Research",
+    "summary": "Agentic AI and spec-driven development in my daily workflow, and master's research into how AI is changing DevOps in South African organisations.",
     "skills": [
-      { "name": "PostgreSQL", "level": 85, "years": 3 },
-      { "name": "MongoDB", "level": 80, "years": 2 },
-      { "name": "SQL/Oracle", "level": 82, "years": 3 },
-      { "name": "AWS DynamoDB", "level": 75, "years": 2 }
+      { "name": "Agentic AI", "icon": "agent" },
+      { "name": "Spec-Driven Development", "icon": "spec" },
+      { "name": "AI in DevOps Research", "icon": "research" }
     ]
   },
   {
-    "title": "DevOps & Cloud",
-    "icon": "Cloud",
-    "color": "from-pink-500 to-cyan-300",
+    "id": "devops",
+    "title": "DevOps & CI/CD",
+    "summary": "Automated build, test and release, with infrastructure defined as code.",
     "skills": [
-      { "name": "AWS", "level": 70, "years": 5 },
-      { "name": "Docker/Kubernetes", "level": 60, "years": 4 },
-      { "name": "CI/CD", "level": 70, "years": 5 },
-      { "name": "Terraform", "level": 80, "years": 3 }
+      { "name": "Git Pipelines (CI/CD)", "icon": "git", "years": 5 },
+      { "name": "Docker / Kubernetes", "icon": "kubernetes", "years": 4 },
+      { "name": "Terraform", "icon": "terraform", "years": 3 }
+    ]
+  },
+  {
+    "id": "cloud",
+    "title": "Cloud & Integration",
+    "summary": "Reliable cloud platforms and connected enterprise systems, kept visible in production.",
+    "skills": [
+      { "name": "Azure", "icon": "azure" },
+      { "name": "AWS", "icon": "aws", "years": 5 },
+      { "name": "Enterprise System Integration", "icon": "integration" },
+      { "name": "Splunk", "icon": "splunk" }
     ]
   }
 ]

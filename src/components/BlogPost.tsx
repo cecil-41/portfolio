@@ -1,425 +1,284 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Calendar, User, Clock, Copy, Check, ExternalLink, ArrowLeft, Share2, Home, ChevronRight } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
-import rehypeHighlight from 'rehype-highlight';
-import 'highlight.js/styles/github-dark.css';
-import blogData from '../data/blogs.json';
+import { ArrowLeft, ArrowRight, ArrowUpRight, Check, Share2 } from 'lucide-react';
+import { EASE_OUT, MagneticButton, useReducedMotion } from './ui';
 import SEO from './SEO';
+import PostBody from './blog/PostBody';
+import PostCover from './blog/PostCover';
+import PostMeta from './blog/PostMeta';
+import { neighbours, posts } from './blog/posts';
+import type { Post } from './blog/posts';
+import { copyText } from '../utils/clipboard';
+import profile from '../data/profile.json';
 
-interface BlogPost {
-  id: number;
-  title: string;
-  excerpt: string;
-  date: string;
-  author: string;
-  readTime: number;
-  category: string;
-  image: string;
-  slug: string;
-  content?: string;
-  references?: Array<{
-    title: string;
-    url: string;
-    description: string;
-  }>;
-}
+const PORTRAIT_SRC = `${import.meta.env.BASE_URL}images/cecil.webp`;
+
+const hostOf = (url: string) => {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return url;
+  }
+};
+
+const NeighbourLink: React.FC<{ post: Post; direction: 'older' | 'newer' }> = ({
+  post,
+  direction,
+}) => {
+  const newer = direction === 'newer';
+  return (
+    <Link
+      to={`/blog/${post.slug}`}
+      rel={newer ? 'next' : 'prev'}
+      className={`group flex h-full flex-col gap-3 rounded-2xl border border-line bg-surface p-5 text-fg transition-colors duration-200 hover:border-muted/60 hover:bg-surface-2 hover:text-fg sm:p-6 ${
+        newer ? 'sm:items-end sm:text-right' : ''
+      }`}
+    >
+      <span className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-muted group-hover:text-accent-ink">
+        {!newer && (
+          <ArrowLeft
+            size={14}
+            aria-hidden="true"
+            className="transition-transform duration-200 group-hover:-translate-x-0.5"
+          />
+        )}
+        {newer ? 'Newer' : 'Older'}
+        {newer && (
+          <ArrowRight
+            size={14}
+            aria-hidden="true"
+            className="transition-transform duration-200 group-hover:translate-x-0.5"
+          />
+        )}
+      </span>
+      <span className="font-display text-lg font-semibold leading-snug tracking-[-0.02em] text-pretty">
+        {post.title}
+      </span>
+    </Link>
+  );
+};
 
 const BlogPost: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const navigate = useNavigate();
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [copiedCode, setCopiedCode] = useState<string | null>(null);
+  const reduced = useReducedMotion();
   const [shareSuccess, setShareSuccess] = useState(false);
-  const contentRef = useRef<HTMLDivElement>(null);
 
-  const blog = blogData.find((post: BlogPost) => post.slug === slug);
+  const blog = posts.find((post) => post.slug === slug);
+  const { older, newer } = neighbours(slug ?? '');
 
-  // Track scroll progress
-  useEffect(() => {
-    const handleScroll = () => {
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
-      const scrollTop = window.scrollY;
-      const progress = (scrollTop / (documentHeight - windowHeight)) * 100;
-      setScrollProgress(Math.min(progress, 100));
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [slug]);
 
-  // Update page title
   useEffect(() => {
-    if (blog) {
-      document.title = `${blog.title} | Cecil's Portfolio`;
-    }
+    if (blog) document.title = `${blog.title} | Cecil Sithole`;
     return () => {
       document.title = "Cecil's Portfolio";
     };
   }, [blog]);
 
-  // Copy code to clipboard
-  const copyToClipboard = (code: string, id: string) => {
-    navigator.clipboard.writeText(code).then(() => {
-      setCopiedCode(id);
-      setTimeout(() => setCopiedCode(null), 2000);
-    });
-  };
+  useEffect(() => {
+    if (!shareSuccess) return;
+    const t = window.setTimeout(() => setShareSuccess(false), 2000);
+    return () => window.clearTimeout(t);
+  }, [shareSuccess]);
 
-  // Share blog post
   const shareBlog = async () => {
     const url = window.location.href;
-    const text = `Check out this article: ${blog?.title}`;
-
     if (navigator.share) {
       try {
-        await navigator.share({ title: blog?.title, text, url });
-      } catch (err) {
-        // User cancelled or error occurred
+        await navigator.share({ title: blog?.title, text: blog?.excerpt, url });
+      } catch {
+        // The user dismissed the share sheet; nothing to do.
       }
-    } else {
-      // Fallback: copy to clipboard
-      navigator.clipboard.writeText(url).then(() => {
-        setShareSuccess(true);
-        setTimeout(() => setShareSuccess(false), 2000);
-      });
+      return;
     }
+    if (await copyText(url)) setShareSuccess(true);
   };
 
   if (!blog) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-deep-950">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">
-            Blog Post Not Found
+      <main className="grid min-h-screen place-items-center px-5 pt-16">
+        <div className="max-w-md text-center">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent-ink">404</p>
+          <h1 className="mt-4 font-display text-4xl font-semibold tracking-display text-fg">
+            Article not found
           </h1>
-          <p className="text-slate-600 dark:text-slate-400 mb-8">
-            The blog post you're looking for doesn't exist.
+          <p className="mt-4 text-muted">
+            The article you're looking for doesn't exist or has moved.
           </p>
-          <Link
-            to="/#blog"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-linear-to-r from-purple-400 to-pink-500 text-white rounded-lg font-semibold shadow-lg hover:shadow-glow transition-all"
-          >
-            <ArrowLeft size={20} />
-            Back to Blog
-          </Link>
+          <div className="mt-8">
+            <MagneticButton href="#/blog" variant="secondary">
+              <ArrowLeft size={16} aria-hidden="true" />
+              All writing
+            </MagneticButton>
+          </div>
         </div>
-      </div>
+      </main>
     );
   }
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-  };
+  const enter = (delay: number) => ({
+    initial: { opacity: 0, y: reduced ? 0 : 16 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: reduced ? 0.15 : 0.6, delay: reduced ? 0 : delay, ease: EASE_OUT },
+  });
 
   return (
-    <div className="min-h-screen bg-white dark:bg-deep-950 pt-20">
-      {/* SEO Meta Tags */}
-      {blog && (
-        <SEO
-          title={`${blog.title} | Cecil's Blog`}
-          description={blog.excerpt}
-          image={blog.image}
-          url={window.location.href}
-          type="article"
-          author={blog.author}
-          publishedTime={blog.date}
-        />
-      )}
+    <main className="min-h-screen pt-16">
+      <SEO
+        title={`${blog.title} | Cecil Sithole`}
+        description={blog.excerpt}
+        image={blog.image}
+        url={window.location.href}
+        type="article"
+        author={blog.author}
+        publishedTime={blog.date}
+      />
 
-      {/* Reading Progress Bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-slate-200/50 dark:bg-deep-800">
-        <motion.div
-          className="h-full bg-linear-to-r from-purple-400 to-pink-500"
-          style={{ width: `${scrollProgress}%` }}
-          initial={{ width: 0 }}
-          animate={{ width: `${scrollProgress}%` }}
-          transition={{ duration: 0.1 }}
-        />
-      </div>
-
-      {/* Hero Image */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="relative h-96 overflow-hidden"
-      >
-        <img
-          src={blog.image}
-          alt={blog.title}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-linear-to-t from-slate-900/80 to-transparent" />
-
-        {/* Breadcrumb - Top Left (Hidden on mobile) */}
-        <div className="absolute top-4 left-0 right-0 z-10 hidden md:block">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <nav className="flex items-center gap-2 text-white/90 text-sm">
-              <Link 
-                to="/" 
-                className="hover:text-white transition-colors flex items-center gap-1"
-              >
-                <Home size={16} />
-                Home
-              </Link>
-              <ChevronRight size={16} className="text-white/60" />
-              <Link 
-                to="/blog" 
-                className="hover:text-white transition-colors"
-              >
-                All Articles
-              </Link>
-              <ChevronRight size={16} className="text-white/60" />
-              <span className="text-white font-medium truncate max-w-[200px] sm:max-w-none">
-                {blog.title}
-              </span>
-            </nav>
-          </div>
-        </div>
-
-        {/* Badge & Button Container - Aligned with Navigation */}
-        <div className="absolute top-16 left-0 right-0">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-            {/* Category Badge - Left */}
-            <span className="px-4 py-2 bg-linear-to-r from-purple-400 to-pink-500 text-white text-sm font-semibold rounded-full">
-              {blog.category}
-            </span>
-
-            {/* Back Button - Right */}
-            <motion.button
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => navigate('/blog')}
-              className="inline-flex items-center gap-2 px-4 py-2 border-2 border-purple-400 text-purple-400 dark:border-cyan-300 dark:text-cyan-300 bg-white/10 dark:bg-deep-950/50 backdrop-blur-sm rounded-full font-semibold hover:bg-purple-400/10 dark:hover:bg-cyan-300/10 transition-all shadow-lg"
-            >
-              <ArrowLeft size={18} />
-              <span className="hidden sm:inline">Back to All Articles</span>
-              <span className="sm:hidden">Back</span>
-            </motion.button>
-          </div>
-        </div>
-
-        {/* Title Overlay */}
-        <div className="absolute bottom-0 left-0 right-0 p-8">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-4xl md:text-5xl font-bold text-white mb-4"
-            >
-              {blog.title}
-            </motion.h1>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Content */}
-      <article className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Meta Info & Share */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="flex flex-wrap items-center justify-between gap-4 mb-8 pb-8 border-b border-slate-200 dark:border-purple-900/30"
+      <article>
+        {/* Header */}
+        <motion.header
+          {...enter(0)}
+          className="mx-auto w-full max-w-3xl px-5 pt-12 sm:px-8 md:pt-20"
         >
-          <div className="flex flex-wrap gap-4 text-slate-600 dark:text-slate-400">
-            <div className="flex items-center gap-2">
-              <Calendar size={18} />
-              <span>{formatDate(blog.date)}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <User size={18} />
-              <span>{blog.author}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Clock size={18} />
-              <span>{blog.readTime} min read</span>
-            </div>
-          </div>
-
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={shareBlog}
-            className="flex items-center gap-2 px-4 py-2 bg-purple-100/80 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-500/30 text-purple-600 dark:text-purple-400 rounded-xl font-medium hover:bg-purple-200/80 dark:hover:bg-purple-900/30 transition-colors"
-          >
-            {shareSuccess ? (
-              <>
-                <Check size={18} />
-                Link Copied!
-              </>
-            ) : (
-              <>
-                <Share2 size={18} />
-                Share
-              </>
-            )}
-          </motion.button>
-        </motion.div>
-
-        {/* Excerpt */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="mb-8"
-        >
-          <p className="text-xl text-slate-700 dark:text-slate-300 leading-relaxed font-normal italic border-l-4 border-purple-400 pl-6 py-2">
-            {blog.excerpt}
-          </p>
-        </motion.div>
-
-        {/* Main Content */}
-        <motion.div
-          ref={contentRef}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="prose prose-lg prose-slate dark:prose-invert max-w-none"
-        >
-          {blog.content ? (
-            <ReactMarkdown
-              rehypePlugins={[rehypeHighlight]}
-              components={{
-                h1: ({ node, ...props }) => (
-                  <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mt-12 mb-6" {...props} />
-                ),
-                h2: ({ node, ...props }) => (
-                  <h2 className="text-2xl font-semibold text-slate-800 dark:text-slate-200 mt-10 mb-4" {...props} />
-                ),
-                h3: ({ node, ...props }) => (
-                  <h3 className="text-xl font-semibold text-slate-800 dark:text-slate-200 mt-8 mb-3" {...props} />
-                ),
-                p: ({ node, ...props }) => (
-                  <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-6" {...props} />
-                ),
-                ul: ({ node, ...props }) => (
-                  <ul className="list-disc pl-6 space-y-2 mb-6 text-slate-700 dark:text-slate-300" {...props} />
-                ),
-                ol: ({ node, ...props }) => (
-                  <ol className="list-decimal pl-6 space-y-2 mb-6 text-slate-700 dark:text-slate-300" {...props} />
-                ),
-                li: ({ node, ...props }) => (
-                  <li className="leading-relaxed" {...props} />
-                ),
-                code: ({ node, inline, className, children, ...props }: any) => {
-                  const codeString = String(children).replace(/\n$/, '');
-                  const codeId = `code-${Math.random().toString(36).substr(2, 9)}`;
-
-                  return !inline ? (
-                    <div className="relative group">
-                      <button
-                        onClick={() => copyToClipboard(codeString, codeId)}
-                        className="absolute top-2 right-2 p-2 rounded-md bg-slate-700 hover:bg-slate-600 text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10"
-                        title="Copy code"
-                      >
-                        {copiedCode === codeId ? (
-                          <Check size={16} className="text-green-400" />
-                        ) : (
-                          <Copy size={16} />
-                        )}
-                      </button>
-                      <code className={className} {...props}>
-                        {children}
-                      </code>
-                    </div>
-                  ) : (
-                    <code className="bg-slate-200 dark:bg-deep-700 px-1.5 py-0.5 rounded text-sm font-mono text-slate-800 dark:text-slate-200" {...props}>
-                      {children}
-                    </code>
-                  );
-                },
-                pre: ({ node, ...props }) => (
-                  <pre className="bg-slate-900 text-slate-100 rounded-lg p-4 overflow-x-auto my-6 border border-slate-700" {...props} />
-                ),
-                strong: ({ node, ...props }) => (
-                  <strong className="font-semibold text-slate-900 dark:text-slate-100" {...props} />
-                ),
-                img: ({ node, ...props }) => (
-                  <img className="w-full rounded-lg shadow-md my-8" {...props} />
-                ),
-                blockquote: ({ node, ...props }) => (
-                  <blockquote className="border-l-4 border-purple-400 pl-4 py-2 italic text-slate-600 dark:text-slate-400 my-6" {...props} />
-                ),
-              }}
-            >
-              {blog.content}
-            </ReactMarkdown>
-          ) : (
-            <p className="text-slate-700 dark:text-slate-300">Content not available.</p>
-          )}
-        </motion.div>
-
-        {/* References Section */}
-        {blog.references && blog.references.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="mt-12 pt-8 border-t border-slate-200 dark:border-purple-900/30"
-          >
-            <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-6">
-              References & Further Reading
-            </h3>
-            <div className="space-y-3">
-              {blog.references.map((ref, index) => (
-                <motion.a
-                  key={index}
-                  href={ref.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ x: 5 }}
-                  className="flex items-start gap-3 p-4 rounded-xl card-glow hover:shadow-card-hover group"
-                >
-                  <ExternalLink size={20} className="mt-0.5 text-purple-500 shrink-0" />
-                  <div className="flex-1">
-                    <div className="font-semibold text-slate-900 dark:text-slate-100 group-hover:text-purple-500 dark:group-hover:text-purple-400 transition-colors">
-                      {ref.title}
-                    </div>
-                    <div className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                      {ref.description}
-                    </div>
-                  </div>
-                </motion.a>
-              ))}
-            </div>
-          </motion.div>
-        )}
-
-        {/* Related/More Articles CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
-          className="mt-16 pt-8 border-t border-slate-200 dark:border-purple-900/30 text-center"
-        >
-          <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-4">
-            Enjoyed this article?
-          </h3>
-          <p className="text-slate-600 dark:text-slate-400 mb-6">
-            Check out more articles on web development, DevOps, and software engineering.
-          </p>
           <Link
             to="/blog"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-linear-to-r from-purple-500 to-pink-500 text-white rounded-xl font-semibold shadow-glow hover:shadow-glow-pink transition-all"
-            style={{ color: 'white' }}
+            className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-muted hover:text-fg"
           >
-            View All Articles
+            <ArrowLeft size={14} aria-hidden="true" />
+            All writing
           </Link>
+
+          <p className="mt-10 font-mono text-xs font-medium uppercase tracking-[0.2em] text-accent-ink">
+            {blog.category}
+          </p>
+          <h1 className="mt-4 font-display text-[clamp(2.25rem,5.5vw,3.75rem)] font-semibold leading-[1.04] tracking-display text-fg text-balance">
+            {blog.title}
+          </h1>
+          <p className="mt-6 text-lg leading-relaxed text-muted text-pretty sm:text-xl">
+            {blog.excerpt}
+          </p>
+
+          <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-y border-line py-4">
+            <div className="flex items-center gap-3">
+              <img
+                src={PORTRAIT_SRC}
+                alt=""
+                width={40}
+                height={40}
+                decoding="async"
+                className="h-10 w-10 rounded-full border border-line object-cover object-[50%_18%]"
+              />
+              <div>
+                <p className="text-sm font-medium text-fg">
+                  {blog.author.startsWith('Cecil') ? profile.name : blog.author}
+                </p>
+                <PostMeta post={blog} month="long" className="mt-1 text-[0.68rem]" />
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={shareBlog}
+              className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-full border border-line bg-surface px-4 text-sm text-fg hover:border-muted hover:bg-surface-2"
+            >
+              {shareSuccess ? (
+                <Check size={16} aria-hidden="true" className="text-accent-ink" />
+              ) : (
+                <Share2 size={16} aria-hidden="true" />
+              )}
+              <span aria-live="polite">{shareSuccess ? 'Link copied' : 'Share'}</span>
+            </button>
+          </div>
+        </motion.header>
+
+        {/* Cover */}
+        <motion.figure {...enter(0.08)} className="mx-auto mt-10 w-full max-w-5xl px-5 sm:px-8">
+          <PostCover
+            post={blog}
+            width={1600}
+            height={800}
+            priority
+            className="aspect-[2/1] rounded-2xl border border-line"
+          />
+        </motion.figure>
+
+        {/* Body */}
+        <motion.div {...enter(0.14)} className="mx-auto w-full max-w-3xl px-5 py-12 sm:px-8 md:py-16">
+          <div className="mx-auto max-w-prose">
+            {blog.content ? (
+              <PostBody markdown={blog.content} />
+            ) : (
+              <p className="text-muted">This article has no content yet.</p>
+            )}
+
+            {blog.references && blog.references.length > 0 && (
+              <section aria-labelledby="references-heading" className="mt-16 border-t border-line pt-10">
+                <h2
+                  id="references-heading"
+                  className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-muted"
+                >
+                  References and further reading
+                </h2>
+                <ol className="mt-6 divide-y divide-line">
+                  {blog.references.map((ref) => (
+                    <li key={ref.url}>
+                      <a
+                        href={ref.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group flex items-start gap-4 py-4 text-fg hover:text-fg"
+                      >
+                        <span className="min-w-0 flex-1">
+                          <span className="block font-medium group-hover:text-accent-ink">
+                            {ref.title}
+                            <span className="sr-only"> (opens in a new tab)</span>
+                          </span>
+                          {ref.description && (
+                            <span className="mt-1 block text-sm text-muted">{ref.description}</span>
+                          )}
+                        </span>
+                        <span className="hidden shrink-0 pt-1 font-mono text-xs text-muted sm:block">
+                          {hostOf(ref.url)}
+                        </span>
+                        <ArrowUpRight
+                          size={16}
+                          aria-hidden="true"
+                          className="mt-1 shrink-0 text-muted transition-[color,transform] duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-accent-ink"
+                        />
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            )}
+          </div>
         </motion.div>
       </article>
-    </div>
+
+      {/* Older / newer */}
+      {(older || newer) && (
+        <nav
+          aria-label="More writing"
+          className="mx-auto w-full max-w-3xl px-5 pb-24 sm:px-8 md:pb-32"
+        >
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>{older && <NeighbourLink post={older} direction="older" />}</div>
+            <div>{newer && <NeighbourLink post={newer} direction="newer" />}</div>
+          </div>
+          <div className="mt-10 text-center">
+            <Link
+              to="/blog"
+              className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-muted hover:text-fg"
+            >
+              All writing
+              <ArrowRight size={14} aria-hidden="true" />
+            </Link>
+          </div>
+        </nav>
+      )}
+    </main>
   );
 };
 

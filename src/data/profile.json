@@ -1,0 +1,37 @@
+{
+  "name": "Cecil Sithole",
+  "title": "Software Engineer",
+  "subtitle": "AI & DevOps Researcher",
+  "yearsExperience": 6,
+  "tagline": "I design and build scalable applications and data solutions, from full-stack web and mobile apps to real-time pipelines, enterprise integrations and reliable cloud platforms that turn data into actionable insight.",
+  "focus": [
+    "Python",
+    "React",
+    "Angular",
+    "React Native",
+    "FastAPI",
+    "C# / .NET",
+    "Data Engineering",
+    "Real-time Streaming",
+    "Agentic AI",
+    "Spec-Driven Development",
+    "System Integration",
+    "DevOps",
+    "Azure",
+    "Databricks",
+    "Apache Spark",
+    "PySpark",
+    "Delta Lake",
+    "Spark Declarative Pipelines",
+    "Apache Kafka",
+    "Splunk",
+    "Git Pipelines (CI/CD)"
+  ],
+  "email": "cecilbennett41@gmail.com",
+  "socials": [
+    { "id": "github", "label": "GitHub", "url": "https://github.com/cecil-41" },
+    { "id": "linkedin", "label": "LinkedIn", "url": "https://www.linkedin.com/in/cecil-sithole-a596271b0/" },
+    { "id": "youtube", "label": "YouTube", "url": "https://www.youtube.com/channel/UCD1MViso0XFwCVrAFwc86Qg" },
+    { "id": "email", "label": "Email", "url": "mailto:cecilbennett41@gmail.com" }
+  ]
+}

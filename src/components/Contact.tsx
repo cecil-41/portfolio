@@ -1,182 +1,138 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Github, Linkedin, Twitter, Youtube } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { ArrowUpRight, Check, Copy, Mail } from 'lucide-react';
+import profile from '../data/profile.json';
+import { copyText } from '../utils/clipboard';
+import { SOCIAL_ICONS } from './socialIcons';
+import { MagneticButton, Reveal, Section, SectionHeading } from './ui';
+
+/** A readable handle for each profile URL, e.g. "github.com/cecil-41". */
+const handleOf = (url: string) => {
+  try {
+    const u = new URL(url);
+    if (u.hostname.includes('youtube')) return 'youtube.com';
+    return `${u.hostname.replace(/^www\./, '')}${u.pathname.replace(/\/$/, '')}`;
+  } catch {
+    return url;
+  }
+};
 
 const Contact: React.FC = () => {
+  const [copied, setCopied] = useState(false);
+  const elsewhere = profile.socials.filter((s) => s.id !== 'email');
 
-  const contactInfo = [
-    {
-      icon: <Mail size={24} />,
-      label: 'Email',
-      value: 'cecilbennett41@gmail.com',
-      link: 'mailto:cecilbennett41@gmail.com',
-    },
-    {
-      icon: <Phone size={24} />,
-      label: 'Phone',
-      value: '+27 (0)74 799 4658',
-      link: 'tel:+27747994658',
-    },
-    {
-      icon: <MapPin size={24} />,
-      label: 'Location',
-      value: '256 Burger St, Pretoria North, Pretoria, 0116',
-      link: '#',
-    },
-  ];
+  useEffect(() => {
+    if (!copied) return;
+    const t = window.setTimeout(() => setCopied(false), 2200);
+    return () => window.clearTimeout(t);
+  }, [copied]);
 
-  const socialLinks = [
-    { icon: <Github size={24} />, label: 'GitHub', link: 'https://github.com/cecil-41' },
-    { icon: <Linkedin size={24} />, label: 'LinkedIn', link: 'https://www.linkedin.com/in/cecil-sithole-a596271b0/' },
-    { icon: <Twitter size={24} />, label: 'Twitter', link: 'https://x.com/CecilBarnard41' },
-    { icon: <Youtube size={24} />, label: 'YouTube', link: 'https://www.youtube.com/channel/UCD1MViso0XFwCVrAFwc86Qg' },
-  ];
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6 },
-    },
+  const copyEmail = async () => {
+    if (await copyText(profile.email)) setCopied(true);
   };
 
   return (
-    <>
-      <section id="contact" className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-deep-900 relative overflow-hidden">
-        <div className="absolute inset-0 line-grid" />
-        <div className="max-w-6xl mx-auto relative z-10">
-          {/* Section Header */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl sm:text-5xl font-bold font-display mb-4">
-              <span className="bg-linear-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
-                Let's Connect
-              </span>
-            </h2>
-            <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto">
-              Have a project in mind or just want to chat? Feel free to reach out!
-            </p>
-          </motion.div>
+    <Section
+      id="contact"
+      aria-labelledby="contact-heading"
+      className="overflow-hidden border-t border-line"
+    >
+      {/* Quiet depth: a faint dot grid and a soft accent wash behind the headline. */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(var(--color-line)_1px,transparent_1px)] bg-size-[22px_22px] [mask-image:radial-gradient(ellipse_55%_60%_at_20%_30%,black,transparent)]"
+      />
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-40 left-[-10%] h-[36rem] w-[50rem] rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--color-accent)_12%,transparent),transparent)]"
+      />
 
-          <div className="max-w-2xl mx-auto">
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              whileInView="visible"
-            >
-              {/* Contact Information */}
-                <div className="mb-8">
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Contact Information</h3>
-                <div className="space-y-4">
-                  {contactInfo.map((info, idx) => (
-                    <motion.a
-                      key={idx}
-                      variants={itemVariants}
-                      href={info.link}
-                      className="flex items-start gap-4 p-4 card-glow hover:shadow-card-hover group"
-                    >
-                      <div className="text-purple-500 dark:text-purple-400 group-hover:scale-110 transition-transform duration-300">
-                        {info.icon}
-                      </div>
-                      <div>
-                        <p className="text-sm text-slate-600 dark:text-slate-400">{info.label}</p>
-                        <p className="text-lg font-semibold text-slate-900 dark:text-white">
-                          {info.value}
-                        </p>
-                      </div>
-                    </motion.a>
-                  ))}
-                </div>
-              </div>
+      <div className="relative grid grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-10">
+        <div className="min-w-0 lg:col-span-8">
+          <Reveal>
+            <SectionHeading
+              id="contact-heading"
+              index={6}
+              label="Contact"
+              size="display"
+              title={
+                <>
+                  Let&rsquo;s build something <span className="text-accent-ink">reliable.</span>
+                </>
+              }
+              lead="I'm a software engineer with experience across software, data platforms, cloud and AI. If you're hiring or have a system that needs building, email is the quickest way to reach me."
+              className="mb-10! md:mb-12!"
+            />
+          </Reveal>
 
-              {/* Social Links */}
-              <div>
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Follow Me</h3>
-                <div className="flex gap-4">
-                  {socialLinks.map((social, idx) => (
-                    <motion.a
-                      key={idx}
-                      variants={itemVariants}
-                      href={social.link}
-                      className="cursor-pointer p-4 card-glow text-slate-600 dark:text-slate-300 hover:text-purple-500 dark:hover:text-purple-400 hover:shadow-card-hover hover:border-purple-400/40 transition-all duration-300"
-                      whileHover={{ y: -4 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      {social.icon}
-                    </motion.a>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-white dark:bg-deep-950 border-t border-slate-200/60 dark:border-purple-900/25 py-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-2 gap-8 mb-8">
-            {/* Brand */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 bg-linear-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-glow">
-                  <span className="font-bold text-white font-display">C</span>
-                </div>
-                <span className="font-bold text-xl font-display bg-linear-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
-                  Cecil
+          <Reveal delay={0.08}>
+            <div className="flex flex-wrap items-center gap-3">
+              <MagneticButton href={`mailto:${profile.email}`} size="lg">
+                <Mail size={18} aria-hidden="true" />
+                Email me
+              </MagneticButton>
+              <MagneticButton
+                variant="secondary"
+                size="lg"
+                onClick={copyEmail}
+                aria-label={copied ? 'Email address copied' : `Copy email address ${profile.email}`}
+                className="px-5! font-mono text-sm!"
+              >
+                {copied ? (
+                  <Check size={16} aria-hidden="true" className="text-accent-ink" />
+                ) : (
+                  <Copy size={16} aria-hidden="true" className="text-muted" />
+                )}
+                <span className={copied ? 'text-accent-ink' : ''}>
+                  {copied ? 'Copied' : profile.email}
                 </span>
-              </div>
-              <p className="text-slate-600 dark:text-slate-400 text-sm">
-                Crafting exceptional digital experiences with modern technologies.
-              </p>
-            </motion.div>
-
-            {/* Quick Links */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-            >
-              <h4 className="font-bold text-slate-900 dark:text-white mb-4">Quick Links</h4>
-              <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
-                <li><a href="#home" className="hover:text-purple-400 transition-colors">Home</a></li>
-                <li><a href="#skills" className="hover:text-purple-400 transition-colors">Skills</a></li>
-                <li><a href="#projects" className="hover:text-purple-400 transition-colors">Projects</a></li>
-                <li><a href="#blog" className="hover:text-purple-400 transition-colors">Blog</a></li>
-              </ul>
-            </motion.div>
-          </div>
-
-          {/* Divider */}
-          <div className="border-t border-slate-200/60 dark:border-purple-900/25 pt-8">
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-slate-600 dark:text-slate-400">
-              <p>© {new Date().getFullYear()} Cecil. All rights reserved.</p>
-              <p>Built with React, Tailwind CSS & Framer Motion ✨</p>
+              </MagneticButton>
             </div>
-          </div>
+            <p className="sr-only" aria-live="polite">
+              {copied ? 'Email address copied to clipboard' : ''}
+            </p>
+          </Reveal>
         </div>
-      </footer>
-    </>
+
+        <Reveal delay={0.12} className="min-w-0 lg:col-span-4 lg:pt-28">
+          <h3 className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-muted">
+            Elsewhere
+          </h3>
+          <ul className="mt-4 border-t border-line">
+            {elsewhere.map((social) => {
+              const Icon = SOCIAL_ICONS[social.id];
+              return (
+                <li key={social.id} className="border-b border-line">
+                  <a
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex min-h-16 items-center gap-4 py-4 text-fg hover:text-fg"
+                  >
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-line bg-surface text-muted transition-colors group-hover:border-accent/50 group-hover:text-accent-ink">
+                      {Icon && <Icon size={16} aria-hidden={true} />}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block font-display text-lg font-medium tracking-[-0.02em]">
+                        {social.label}
+                        <span className="sr-only"> (opens in a new tab)</span>
+                      </span>
+                      <span className="block truncate font-mono text-xs text-muted">
+                        {handleOf(social.url)}
+                      </span>
+                    </span>
+                    <ArrowUpRight
+                      size={18}
+                      aria-hidden="true"
+                      className="shrink-0 text-muted transition-[color,transform] duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-accent-ink"
+                    />
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </Reveal>
+      </div>
+    </Section>
   );
 };
 

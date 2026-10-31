@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Award, GraduationCap, Star, CheckCircle, ExternalLink, Clock } from 'lucide-react';
+import React from 'react';
+import type { ComponentType } from 'react';
+import { ArrowUpRight, BadgeCheck, Mic, Users } from 'lucide-react';
+import { SiAmazonwebservices } from 'react-icons/si';
 import qualificationsData from '../data/qualifications.json';
+import { MagneticButton, Reveal, Section, SectionHeading, TiltCard } from './ui';
 
 interface Qualification {
   id: number;
@@ -12,217 +14,270 @@ interface Qualification {
   icon: string;
   description: string;
   credentialId?: string;
+  /** Academic distinction, e.g. "cum laude". */
+  distinction?: string;
+  /** Dissertation or research title, shown under the degree. */
+  research?: string;
 }
 
-const Qualifications: React.FC = () => {
-  const [activeFilter, setActiveFilter] = useState<string>('all');
-  
-  const qualifications: Qualification[] = qualificationsData as unknown as Qualification[];
+type IconType = ComponentType<{ size?: number; className?: string; 'aria-hidden'?: boolean }>;
 
-  const filters = [
-    { id: 'all', label: 'All' },
-    { id: 'certification', label: 'Certifications' },
-    { id: 'education', label: 'Education' },
-    { id: 'achievement', label: 'Achievements' },
-  ];
+/**
+ * Public folder with every certificate. Copied from resume.json `basics.certificatesUrl`
+ * rather than imported, because resume.json also holds contact details we don't want bundled.
+ */
+const CERTIFICATES_URL =
+  'https://drive.google.com/drive/folders/1J3f7hMzE-pCRraPX9NKaqj-01hfndhzs?usp=drive_link';
 
-  const filteredQualifications =
-    activeFilter === 'all'
-      ? qualifications.slice(0, 6)
-      : qualifications.filter((q) => q.type === activeFilter);
+/** Issuer brand marks from Simple Icons, where one exists. */
+const ISSUER_ICONS: Record<string, IconType> = {
+  'Amazon Web Services': SiAmazonwebservices,
+};
 
-  const getIcon = (iconName: string) => {
-    switch (iconName) {
-      case 'award':
-        return Award;
-      case 'graduation-cap':
-        return GraduationCap;
-      case 'star':
-        return Star;
-      default:
-        return Award;
-    }
-  };
+/** Icons for community work, keyed by title. */
+const ACHIEVEMENT_ICONS: Record<string, IconType> = {
+  'Hackathon Mentor': Users,
+  'Career Path Speaker': Mic,
+};
 
-  const getTypeColor = (type: string) => {
-    switch (type) {
-      case 'certification':
-        return 'from-purple-400 to-pink-500';
-      case 'education':
-        return 'from-cyan-300 to-purple-400';
-      case 'achievement':
-        return 'from-pink-500 to-cyan-300';
-      default:
-        return 'from-purple-400 to-pink-500';
-    }
-  };
+/** Placeholder used in the data until a credential ID is issued. */
+const PENDING_CREDENTIAL = 'Will be updated soon';
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
+const all = qualificationsData as Qualification[];
+const education = all.filter((q) => q.type === 'education');
+const certifications = all.filter((q) => q.type === 'certification');
+const achievements = all.filter((q) => q.type === 'achievement');
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5 },
-    },
-  };
+const isInProgress = (q: Qualification) =>
+  /present/i.test(q.date) || /in progress/i.test(q.description);
+
+/** Turns "2020 - 2022" into "2020 – 2022" for display. */
+const formatDate = (date: string) => date.replace(/\s*-\s*/g, ' – ');
+
+/** "AWS Certified Developer - Associate" reads better with an en dash. */
+const formatTitle = (title: string) => title.replace(/\s-\s/g, ' – ');
+
+/** A mono subheading with a hairline and a count, used for each group. */
+const GroupHeading: React.FC<{ id: string; title: string; count: number; children?: React.ReactNode }> = ({
+  id,
+  title,
+  count,
+  children,
+}) => (
+  <div className="mb-5 flex flex-wrap items-center gap-x-4 gap-y-3">
+    <h3
+      id={id}
+      className="font-mono text-xs font-medium uppercase tracking-[0.16em] text-fg"
+    >
+      {title}
+      <span className="ml-2 text-muted tabular-nums">
+        <span className="sr-only">(</span>
+        {String(count).padStart(2, '0')}
+        <span className="sr-only"> items)</span>
+      </span>
+    </h3>
+    <span aria-hidden="true" className="h-px min-w-8 flex-1 bg-line" />
+    {children}
+  </div>
+);
+
+const StatusBadge: React.FC<{ q: Qualification }> = ({ q }) => {
+  if (q.distinction) {
+    return (
+      <span className="inline-flex items-center rounded-full border border-warm/35 bg-warm/10 px-2.5 py-1 font-mono text-[0.68rem] font-medium uppercase tracking-[0.12em] text-warm-ink">
+        {q.distinction}
+      </span>
+    );
+  }
+  if (isInProgress(q)) {
+    return (
+      <span className="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface-2/60 px-2.5 py-1 font-mono text-[0.68rem] font-medium uppercase tracking-[0.12em] text-accent-ink">
+        <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent" />
+        In progress
+      </span>
+    );
+  }
+  return null;
+};
+
+/** Degrees as a ledger on a vertical rail, most recent first. */
+const EducationList: React.FC = () => (
+  <div className="rounded-2xl border border-line bg-surface">
+    <ol className="relative">
+      {education.map((q, i) => {
+        const current = isInProgress(q);
+        const last = i === education.length - 1;
+        // The long-form name, shown when it adds something beyond the title.
+        const detail = q.description.replace(/\s*\(In Progress\)\s*$/i, '');
+        const showDetail = detail.toLowerCase() !== q.title.toLowerCase();
+        return (
+          <li
+            key={q.id}
+            className={`relative grid gap-x-8 gap-y-2 py-6 pr-5 pl-12 sm:grid-cols-[8.5rem_1fr_auto] sm:items-baseline sm:py-7 sm:pr-8 sm:pl-14 ${
+              last ? '' : 'border-b border-line'
+            }`}
+          >
+            {/* Rail and node. The rail runs through every row; the node marks status. */}
+            <span
+              aria-hidden="true"
+              className={`absolute left-6 w-px bg-line sm:left-7 ${i === 0 ? 'top-9 sm:top-10' : 'top-0'} ${
+                last ? 'h-9 sm:h-10' : 'bottom-0'
+              }`}
+            />
+            <span
+              aria-hidden="true"
+              className={`absolute top-8 left-6 h-2.5 w-2.5 -translate-x-1/2 rounded-full border sm:top-9 sm:left-7 ${
+                current ? 'border-accent bg-bg' : 'border-muted/60 bg-surface-2'
+              }`}
+            />
+
+            <p className="font-mono text-xs tabular-nums text-muted">
+              <span className="sr-only">Dates: </span>
+              {formatDate(q.date)}
+            </p>
+
+            <div className="min-w-0">
+              <h4 className="font-display text-xl font-medium leading-snug tracking-[-0.015em] text-fg text-balance sm:text-[1.375rem]">
+                {q.title}
+              </h4>
+              <p className="mt-1 text-sm text-muted">{q.issuer}</p>
+              {showDetail && <p className="mt-1 text-sm text-muted">{detail}</p>}
+              {q.research && (
+                <p className="mt-3 max-w-prose border-l-2 border-accent/60 pl-3 text-sm leading-relaxed text-fg text-pretty">
+                  <span className="mb-1 block font-mono text-[0.7rem] uppercase tracking-[0.14em] text-accent-ink">
+                    Dissertation
+                  </span>
+                  <cite className="not-italic">{q.research}</cite>
+                </p>
+              )}
+            </div>
+
+            <div className="sm:justify-self-end">
+              <StatusBadge q={q} />
+            </div>
+          </li>
+        );
+      })}
+    </ol>
+  </div>
+);
+
+const CertificationCard: React.FC<{ q: Qualification }> = ({ q }) => {
+  const Logo = ISSUER_ICONS[q.issuer] ?? BadgeCheck;
+  const hasCredential = q.credentialId && q.credentialId !== PENDING_CREDENTIAL;
 
   return (
-    <section id="qualifications" className="py-20 bg-white dark:bg-deep-800 relative overflow-hidden">
-      <div className="absolute inset-0 dot-grid opacity-60" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span className="bg-linear-to-r from-purple-400 via-pink-500 to-cyan-300 bg-clip-text text-transparent">
-              Qualifications
-            </span>
-          </h2>
-          <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto">
-            Certifications, education, and achievements that validate my expertise
-          </p>
-          
-          {/* View All Certificates Button */}
-          <motion.a
-            href="https://drive.google.com/drive/folders/1J3f7hMzE-pCRraPX9NKaqj-01hfndhzs?usp=drive_link"
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-linear-to-r from-purple-500 to-pink-500 text-white rounded-xl font-semibold shadow-glow hover:shadow-glow-pink transition-all duration-300"
-          >
-            <ExternalLink size={20} className="text-white" />
-            <span className="text-white">View All Certificates</span>
-          </motion.a>
-        </motion.div>
-
-        {/* Filter Tabs */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex flex-wrap justify-center gap-4 mb-12"
-        >
-          {filters.map((filter) => (
-            <motion.button
-              key={filter.id}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setActiveFilter(filter.id)}
-              className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
-                activeFilter === filter.id
-                  ? 'bg-linear-to-r from-purple-500 to-pink-500 text-white shadow-glow'
-                  : 'bg-slate-100/80 dark:bg-deep-700 border border-slate-200/70 dark:border-purple-900/30 text-slate-700 dark:text-slate-300 hover:border-purple-400/40 hover:text-purple-600 dark:hover:text-purple-400'
-              }`}
-            >
-              {filter.label}
-            </motion.button>
-          ))}
-        </motion.div>
-
-        {/* Qualifications Grid */}
-        <motion.div
-          key={activeFilter}
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="grid md:grid-cols-2 gap-6"
-        >
-          {filteredQualifications.map((qualification) => {
-            const Icon = getIcon(qualification.icon);
-            return (
-              <motion.div
-                key={qualification.id}
-                variants={itemVariants}
-                whileHover={{ y: -5, scale: 1.02 }}
-                className="card-glow p-6 shadow-card hover:shadow-card-hover"
-              >
-                <div className="flex items-start gap-4">
-                  {/* Icon */}
-                  <div
-                    className={`p-3 rounded-xl bg-linear-to-br ${getTypeColor(
-                      qualification.type
-                    )} shrink-0`}
-                  >
-                    <Icon size={28} className="text-white" />
-                  </div>
-
-                  {/* Content */}
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100">
-                        {qualification.title}
-                      </h3>
-                      {qualification.description?.includes('In Progress') ? (
-                        <Clock size={20} className="text-yellow-500 shrink-0 ml-2 animate-pulse" />
-                      ) : (
-                        <CheckCircle size={20} className="text-green-500 shrink-0 ml-2" />
-                      )}
-                    </div>
-
-                    <p className="text-purple-400 dark:text-pink-500 font-semibold mb-2">
-                      {qualification.issuer}
-                    </p>
-
-                    <p className="text-slate-600 dark:text-slate-400 text-sm mb-3">
-                      {qualification.description}
-                    </p>
-
-                    <div className="flex items-center justify-between">
-                      <span className="text-slate-500 dark:text-slate-500 text-sm">
-                        {qualification.date}
-                      </span>
-                    </div>
-
-                    {/* Type Badge */}
-                    <div className="mt-3">
-                      <span
-                        className={`inline-block px-3 py-1 rounded-full text-xs font-semibold text-white bg-linear-to-r ${getTypeColor(
-                          qualification.type
-                        )}`}
-                      >
-                        {qualification.type.charAt(0).toUpperCase() + qualification.type.slice(1)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
-        </motion.div>
-
-        {/* Empty State */}
-        {filteredQualifications.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-12"
-          >
-            <p className="text-slate-600 dark:text-slate-400 text-lg">
-              No qualifications found for this filter.
-            </p>
-          </motion.div>
-        )}
+    <TiltCard
+      maxTilt={5}
+      className="flex h-full flex-col rounded-2xl border border-line bg-surface p-6 sm:p-7"
+    >
+      <div className="flex items-start justify-between gap-4">
+        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-line bg-surface-2 text-fg">
+          <Logo size={22} aria-hidden={true} />
+        </span>
+        <span className="font-mono text-xs tabular-nums text-muted">{q.date}</span>
       </div>
-    </section>
+
+      <h4 className="mt-6 font-display text-lg font-medium leading-snug tracking-[-0.01em] text-fg text-balance">
+        {formatTitle(q.title)}
+      </h4>
+      <p className="mt-1 text-sm text-muted">{q.issuer}</p>
+      <p className="mt-4 text-sm leading-relaxed text-muted text-pretty">{q.description}</p>
+
+      <dl className="mt-auto border-t border-line pt-4 font-mono text-[0.7rem] leading-relaxed">
+        <div className="flex flex-col gap-1">
+          <dt className="uppercase tracking-[0.14em] text-muted">Credential ID</dt>
+          <dd className={hasCredential ? 'break-all text-fg select-all' : 'text-muted'}>
+            {hasCredential ? q.credentialId : 'Pending'}
+          </dd>
+        </div>
+      </dl>
+    </TiltCard>
   );
 };
+
+const AchievementCard: React.FC<{ q: Qualification }> = ({ q }) => {
+  const Icon = ACHIEVEMENT_ICONS[q.title] ?? BadgeCheck;
+  return (
+    <div className="flex h-full gap-4 rounded-2xl border border-line bg-surface p-6">
+      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-line bg-surface-2 text-accent-ink">
+        <Icon size={18} aria-hidden={true} />
+      </span>
+      <div className="min-w-0">
+        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <h4 className="font-display text-lg font-medium leading-snug text-fg">{q.title}</h4>
+          <span className="font-mono text-xs tabular-nums text-muted">{formatDate(q.date)}</span>
+        </div>
+        <p className="mt-0.5 text-sm text-muted">{q.issuer}</p>
+        <p className="mt-3 text-sm leading-relaxed text-muted text-pretty">{q.description}</p>
+      </div>
+    </div>
+  );
+};
+
+const Qualifications: React.FC = () => (
+  <Section id="qualifications" aria-labelledby="qualifications-heading">
+    <Reveal>
+      <SectionHeading
+        id="qualifications-heading"
+        index={3}
+        label="Qualifications"
+        title="Credentials behind the work"
+        lead="Two cum laude Information Systems degrees from the University of Johannesburg, an M.Com in IT under way researching the impact of AI on DevOps, and AWS certifications across the practitioner, developer and operations tracks."
+      />
+    </Reveal>
+
+    <div className="space-y-16 md:space-y-20">
+      <section aria-labelledby="education-heading">
+        <Reveal>
+          <GroupHeading id="education-heading" title="Education" count={education.length} />
+        </Reveal>
+        <Reveal delay={0.05}>
+          <EducationList />
+        </Reveal>
+      </section>
+
+      <section aria-labelledby="certifications-heading">
+        <Reveal>
+          <GroupHeading id="certifications-heading" title="Certifications" count={certifications.length}>
+            <MagneticButton
+              href={CERTIFICATES_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="secondary"
+              strength={0.2}
+            >
+              View all certificates
+              <ArrowUpRight size={16} aria-hidden="true" />
+              <span className="sr-only">(opens in a new tab)</span>
+            </MagneticButton>
+          </GroupHeading>
+        </Reveal>
+        <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {certifications.map((q, i) => (
+            <Reveal as="li" key={q.id} delay={i * 0.06} className="h-full">
+              <CertificationCard q={q} />
+            </Reveal>
+          ))}
+        </ul>
+      </section>
+
+      {achievements.length > 0 && (
+        <section aria-labelledby="community-heading">
+          <Reveal>
+            <GroupHeading id="community-heading" title="Community" count={achievements.length} />
+          </Reveal>
+          <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {achievements.map((q, i) => (
+              <Reveal as="li" key={q.id} delay={i * 0.06} className="h-full">
+                <AchievementCard q={q} />
+              </Reveal>
+            ))}
+          </ul>
+        </section>
+      )}
+    </div>
+  </Section>
+);
 
 export default Qualifications;

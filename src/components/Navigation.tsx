@@ -1,217 +1,233 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Menu, X, Moon, Sun } from 'lucide-react';
-import { useTheme } from '../hooks/useTheme';
+import React, { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Menu, Moon, Sun, X } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useTheme } from '../hooks/useTheme';
+import { EASE_OUT, useReducedMotion } from './ui';
+import profile from '../data/profile.json';
+
+const NAV_ITEMS = [
+  { name: 'Home', href: '#home' },
+  { name: 'Skills', href: '#skills' },
+  { name: 'Experience', href: '#experience' },
+  { name: 'Qualifications', href: '#qualifications' },
+  { name: 'Testimonials', href: '#testimonials' },
+  { name: 'Blog', href: '#blog' },
+  { name: 'Contact', href: '#contact' },
+];
+
+const scrollToSelector = (href: string) => {
+  const element = document.querySelector(href);
+  if (!element) return;
+  const offset = 80;
+  const top = element.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo({ top, behavior: 'smooth' });
+};
 
 const Navigation: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const { isDark, toggleTheme } = useTheme();
+  const reduced = useReducedMotion();
   const location = useLocation();
   const navigate = useNavigate();
 
-  const navItems = [
-    { name: 'Home', href: '#home' },
-    { name: 'Skills', href: '#skills' },
-    { name: 'Experience', href: '#experience' },
-    { name: 'Qualifications', href: '#qualifications' },
-    { name: 'Projects', href: '#projects' },
-    { name: 'Testimonials', href: '#testimonials' },
-    { name: 'Blog', href: '#blog' },
-    { name: 'Contact', href: '#contact' },
-  ];
-
   const isBlogPostPage = location.pathname.startsWith('/blog/');
   const isBlogListPage = location.pathname === '/blog';
+  const onBlogRoute = isBlogPostPage || isBlogListPage;
+  const currentSection = onBlogRoute ? 'blog' : activeSection;
 
-  // Track active section based on scroll position
+  // Track the active section from scroll position. On blog routes "blog" is pinned (derived below).
   useEffect(() => {
-    // Set active section based on current route
-    if (isBlogListPage || isBlogPostPage) {
-      setActiveSection('blog');
-      return;
-    }
+    if (onBlogRoute) return;
 
-    // Skip observation on blog pages
-    if (isBlogPostPage || isBlogListPage) return;
-
-    const observerOptions = {
-      root: null,
-      rootMargin: '-20% 0px -60% 0px',
-      threshold: 0,
-    };
-
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
-
-    // Observe all sections
-    navItems.forEach((item) => {
-      const element = document.querySelector(item.href);
-      if (element) {
-        observer.observe(element);
+    // The active section is the last one whose top has passed a line 35% down the viewport.
+    // Derived from scroll position (not IntersectionObserver) so tall sections like Experience
+    // stay active when scrolling back up into them.
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const line = window.innerHeight * 0.35;
+      let current = NAV_ITEMS[0].href.slice(1);
+      for (const item of NAV_ITEMS) {
+        const element = document.querySelector(item.href);
+        if (element && element.getBoundingClientRect().top <= line) current = item.href.slice(1);
       }
-    });
+      // At the very bottom the last section may never reach the line.
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
+        current = NAV_ITEMS[NAV_ITEMS.length - 1].href.slice(1);
+      }
+      setActiveSection(current);
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
 
-    return () => observer.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isBlogPostPage, isBlogListPage]);
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [onBlogRoute]);
+
+  // Close the mobile menu with Escape.
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isOpen]);
 
   const handleNavClick = (href: string) => {
     setIsOpen(false);
-    
-    // If we're on a blog page, navigate to home first
-    if (isBlogPostPage || isBlogListPage) {
+    if (onBlogRoute) {
+      // Go home first, then scroll once the homepage has rendered.
       navigate('/');
-      // Wait for navigation and then scroll
-      setTimeout(() => {
-        const element = document.querySelector(href);
-        if (element) {
-          const offset = 80;
-          const elementPosition = element.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - offset;
-          
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
-        }
-      }, 300);
+      setTimeout(() => scrollToSelector(href), 300);
     } else {
-      // Regular scroll behavior
-      setTimeout(() => {
-        const element = document.querySelector(href);
-        if (element) {
-          const offset = 80;
-          const elementPosition = element.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - offset;
-          
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
-        }
-      }, 100);
+      setTimeout(() => scrollToSelector(href), 100);
     }
   };
 
   const handleLogoClick = () => {
-    if (isBlogPostPage || isBlogListPage) {
+    setIsOpen(false);
+    if (onBlogRoute) {
       navigate('/');
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
+  const iconButton =
+    'flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-line ' +
+    'bg-surface/60 text-muted hover:border-muted hover:text-fg';
+
   return (
     <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="fixed top-0 w-full z-50 bg-white/85 dark:bg-deep-950/85 backdrop-blur-xl border-b border-slate-200/60 dark:border-purple-900/30"
+      aria-label="Primary"
+      initial={reduced ? false : { y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.5, ease: EASE_OUT }}
+      className="fixed top-0 z-50 w-full border-b border-line bg-bg/70 backdrop-blur-xl backdrop-saturate-150"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <motion.div
-            whileHover={{ scale: 1.05 }}
+      <div className="mx-auto max-w-7xl px-5 sm:px-8">
+        <div className="flex h-16 items-center justify-between gap-6">
+          {/* Monogram + name */}
+          <button
+            type="button"
             onClick={handleLogoClick}
-            className="flex items-center cursor-pointer"
+            aria-label={`${profile.name}, back to top`}
+            className="group flex cursor-pointer items-center gap-3"
           >
-            <div className="relative w-10 h-10 bg-linear-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-glow">
-              <span className="font-bold text-white font-display">C</span>
-            </div>
-            <span className="ml-2 font-bold text-2xl font-display bg-linear-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
-              Cecil
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-line bg-surface font-mono text-[0.8rem] font-medium tracking-tight text-fg group-hover:border-accent/60">
+              CS
             </span>
-          </motion.div>
+            <span className="font-display text-lg font-semibold tracking-display text-fg">
+              {profile.name}
+            </span>
+          </button>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            {navItems.map((item) => {
-              const isActive = activeSection === item.href.substring(1);
+          {/* Desktop links */}
+          <ul className="hidden items-center gap-7 lg:flex">
+            {NAV_ITEMS.map((item) => {
+              const isActive = currentSection === item.href.substring(1);
               return (
-                <motion.button
-                  key={item.name}
-                  onClick={() => handleNavClick(item.href)}
-                  whileHover={{ scale: 1.05 }}
-                  className={`cursor-pointer transition-colors font-semibold relative ${
-                    isActive
-                      ? 'text-purple-500 dark:text-purple-400'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-purple-500 dark:hover:text-purple-400'
-                  }`}
-                >
-                  {item.name}
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeSection"
-                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-linear-to-r from-purple-500 to-pink-500"
-                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                </motion.button>
+                <li key={item.name}>
+                  <button
+                    type="button"
+                    onClick={() => handleNavClick(item.href)}
+                    aria-current={isActive ? 'true' : undefined}
+                    className={`relative cursor-pointer py-2 text-sm font-medium ${
+                      isActive ? 'text-fg' : 'text-muted hover:text-fg'
+                    }`}
+                  >
+                    {item.name}
+                    {isActive && (
+                      <motion.span
+                        layoutId="nav-underline"
+                        aria-hidden="true"
+                        className="absolute inset-x-0 -bottom-px h-0.5 rounded-full bg-accent"
+                        transition={
+                          reduced ? { duration: 0 } : { type: 'spring', stiffness: 380, damping: 32 }
+                        }
+                      />
+                    )}
+                  </button>
+                </li>
               );
             })}
-          </div>
+          </ul>
 
-          {/* Theme Toggle & Mobile Menu */}
-          <div className="flex items-center gap-4">
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
               onClick={toggleTheme}
-              className="cursor-pointer p-2 rounded-xl bg-slate-100/80 dark:bg-deep-700/80 border border-slate-200/60 dark:border-purple-900/30 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:border-purple-400/30 transition-all duration-200"
+              aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+              title={isDark ? 'Light theme' : 'Dark theme'}
+              className={iconButton}
             >
-              {isDark ? <Sun size={20} /> : <Moon size={20} />}
-            </motion.button>
+              {isDark ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
+            </button>
 
-            {/* Mobile Menu Button */}
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setIsOpen(!isOpen)}
-              className="cursor-pointer md:hidden p-2 rounded-xl bg-slate-100/80 dark:bg-deep-700/80 border border-slate-200/60 dark:border-purple-900/30"
+            <button
+              type="button"
+              onClick={() => setIsOpen((o) => !o)}
+              aria-label={isOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isOpen}
+              aria-controls="mobile-menu"
+              className={`${iconButton} lg:hidden`}
             >
-              {isOpen ? <X size={20} /> : <Menu size={20} />}
-            </motion.button>
+              {isOpen ? <X size={18} aria-hidden="true" /> : <Menu size={18} aria-hidden="true" />}
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      <motion.div
-        initial={{ opacity: 0, height: 0 }}
-        animate={{ opacity: isOpen ? 1 : 0, height: isOpen ? 'auto' : 0 }}
-        transition={{ duration: 0.3 }}
-        className="md:hidden overflow-hidden bg-white/95 dark:bg-deep-950/95 backdrop-blur-xl border-t border-slate-200/60 dark:border-purple-900/30"
-      >
-        <div className="px-4 py-4 space-y-2">
-          {navItems.map((item) => {
-            const isActive = activeSection === item.href.substring(1);
-            return (
-              <motion.button
-                key={item.name}
-                onClick={() => handleNavClick(item.href)}
-                whileHover={{ x: 4 }}
-                className={`cursor-pointer w-full text-left px-4 py-2 rounded-lg transition-colors ${
-                  isActive
-                    ? 'bg-linear-to-r from-purple-500 to-pink-500 text-white shadow-glow'
-                    : 'text-slate-600 dark:text-slate-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-500 dark:hover:text-purple-400'
-                }`}
-              >
-                {item.name}
-              </motion.button>
-            );
-          })}
-        </div>
-      </motion.div>
+      {/* Mobile menu */}
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            id="mobile-menu"
+            key="mobile-menu"
+            initial={reduced ? { opacity: 0 } : { opacity: 0, height: 0 }}
+            animate={reduced ? { opacity: 1 } : { opacity: 1, height: 'auto' }}
+            exit={reduced ? { opacity: 0 } : { opacity: 0, height: 0 }}
+            transition={{ duration: reduced ? 0.01 : 0.3, ease: EASE_OUT }}
+            className="overflow-hidden border-t border-line bg-bg/95 backdrop-blur-xl lg:hidden"
+          >
+            <ul className="mx-auto max-w-7xl px-5 py-4 sm:px-8">
+              {NAV_ITEMS.map((item, i) => {
+                const isActive = currentSection === item.href.substring(1);
+                return (
+                  <li key={item.name}>
+                    <button
+                      type="button"
+                      onClick={() => handleNavClick(item.href)}
+                      aria-current={isActive ? 'true' : undefined}
+                      className={`flex w-full cursor-pointer items-center gap-4 border-b border-line/60 py-3.5 text-left last:border-b-0 ${
+                        isActive ? 'text-fg' : 'text-muted hover:text-fg'
+                      }`}
+                    >
+                      <span className="w-6 font-mono text-xs text-muted">
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
+                      <span className="font-display text-lg tracking-display">{item.name}</span>
+                      {isActive && (
+                        <span aria-hidden="true" className="ml-auto h-1.5 w-1.5 rounded-full bg-accent" />
+                      )}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   );
 };

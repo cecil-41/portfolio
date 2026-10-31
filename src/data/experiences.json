@@ -1,10 +1,37 @@
 [
   {
+    "id": 4,
+    "company": "BMW Group IT Hub South Africa",
+    "position": "Software Engineer",
+    "period": "May 2026 - Present",
+    "description": "Building scalable data solutions that enable automation, real-time data processing and data-driven decision-making, across software engineering, data engineering, cloud, system integration and digital transformation.",
+    "highlights": [
+      "Data pipelines and integrated enterprise systems",
+      "Real-time streaming with Kafka and PySpark on Azure Databricks",
+      "Reliable cloud platforms that turn data into business insight"
+    ],
+    "achievements": [
+      "Designs and develops data pipelines and integrates enterprise systems",
+      "Builds reliable cloud-based platforms that turn data into actionable business insights",
+      "Builds real-time data streaming pipelines with Apache Kafka and Spark (PySpark) on Azure Databricks",
+      "Builds insight dashboards on top of the streamed data",
+      "Tunes and improves existing pipelines to remove lag and processing delays",
+      "Delivers pipelines with Spark Declarative Pipelines and Delta Lake through Git CI/CD pipelines, monitored with Splunk",
+      "Uses agentic AI and spec-driven development in day-to-day engineering"
+    ],
+    "technologies": ["Azure", "Databricks", "Apache Spark", "PySpark", "Apache Kafka", "Delta Lake", "Spark Declarative Pipelines", "Splunk", "Python", "Git Pipelines", "Agentic AI"]
+  },
+  {
     "id": 1,
     "company": "BMW South Africa",
     "position": "Software Engineer (Graduate)",
-    "period": "March 2025 - Present",
-    "description": "Responsible for digitalization and testing Driver Assistance Functions for x3 G45.",
+    "period": "March 2025 - April 2026",
+    "description": "Digitalisation and Driver Assistance Functions testing for the X3 G45.",
+    "highlights": [
+      "Spring Validation Tool deployed to BMW plants in five countries",
+      "Unified vehicle-testing tracker on AWS ECS Fargate",
+      "Driver Assistance Functions testing for the X3 G45"
+    ],
     "achievements": [
       "Developed a comprehensive tracking tool consolidating data from multiple sources",
       "Enabled technicians and engineers to manage testing cars efficiently with unified data access",
@@ -14,7 +41,7 @@
       "Developed Spring Validation Tool for visualizing car weight distribution and spring measurements",
       "Deployed tool globally across BMW plants in South Africa, Germany, Mexico, USA, and China",
       "Created interactive visualization system for engineers to analyze how different car options influence spring load",
-      "Responsible for testing Driver Assistance Functions features of the x3 G45"
+      "Responsible for testing Driver Assistance Functions features of the X3 G45"
     ],
     "technologies": ["React", "AWS ECS", "Fargate", "Tailwind", "Vite", "Python", "Docker", "Node.js", "Lambda", "S3", "API Gateway"]
   },
@@ -24,8 +51,13 @@
     "position": "Software Engineer (Intern)",
     "period": "March 2024 - February 2025",
     "description": "Supported digital transformation initiatives and software development projects.",
+    "highlights": [
+      "Project Management Tool used across BMW Plant 09",
+      "Automated data aggregation that replaced manual Excel work",
+      "Real-time data sync with fewer human errors"
+    ],
     "achievements": [
-      "Successfully built Project Management Tool to manage all x3 G45 projects",
+      "Successfully built Project Management Tool to manage all X3 G45 projects",
       "Automated data aggregation from multiple sources, replacing manual Excel processes",
       "Deployed enterprise solution now used by entire BMW Plant 09 for project management steering",
       "Reduced human errors through automation and enabled real-time data synchronization",
@@ -40,6 +72,11 @@
     "position": "Software Development Tutor",
     "period": "February 2023 - November 2023",
     "description": "Tutored and mentored students in software development module and programming fundamentals.",
+    "highlights": [
+      "Taught core programming concepts and best practices",
+      "One-on-one mentoring and assignment support",
+      "Practical coding sessions and workshops"
+    ],
     "achievements": [
       "Guided students through core programming concepts and best practices",
       "Provided one-on-one mentoring and assignment support",
